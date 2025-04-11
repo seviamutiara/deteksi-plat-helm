@@ -1,0 +1,23 @@
+# Abaikan virtual environment
+venv/
+
+# Abaikan file editor seperti VSCode
+.vscode/
+*.code-workspace
+
+# Abaikan file Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Abaikan file dataset hasil unduhan (opsional)
+dataset/
+*.zip
+
+# Abaikan file model besar
+model/
+*.pt
+*.onnx
+
+# Abaikan logs
+*.log
