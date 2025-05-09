@@ -1,0 +1,59 @@
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: #fff;
+}
+
+.navbar {
+    background: #2f2e61;
+    color: #fff;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar .logo {
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+.navbar nav a {
+    color: #fff;
+    margin-left: 1.5rem;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.container {
+    display: flex;
+    padding: 2rem;
+    align-items: flex-start;
+    justify-content: space-around;
+}
+
+.hero-image {
+    max-width: 300px;
+}
+
+.right-panel {
+    display: grid;
+    grid-template-columns: repeat(3, 150px);
+    grid-gap: 1rem;
+}
+
+.card {
+    padding: 1rem;
+    border-radius: 10px;
+    text-align: center;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+}
+
+.brown { background-color: #a36d5c; }
+.dark { background-color: #2c3e50; }
+.green { background-color: #5a7d3a; }
+.gray { background-color: #f3dede; color: #444; }
+.blue { background-color: #bfe3fa; color: #444; }
+.lightgreen { background-color: #b6f1c1; color: #444; }

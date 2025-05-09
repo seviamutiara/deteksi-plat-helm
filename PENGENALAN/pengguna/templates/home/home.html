@@ -1,0 +1,35 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Kamera Pintar</title>
+    <link rel="stylesheet" href="{% static 'main/style.css' %}">
+</head>
+<body>
+    <header class="navbar">
+        <div class="logo">Kamera Pintar</div>
+        <nav>
+            <a href="#">Dashboard</a>
+            <a href="#">Pelanggaran</a>
+            <a href="#">Info</a>
+            <a href="#">Logout</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        <div class="left-panel">
+            <img src="{% static 'img/motor.png' %}" alt="Scooter Kid" class="hero-image">
+        </div>
+        <div class="right-panel">
+            <div class="card brown">Jenis-Jenis Rambu<br>Lalu Lintas</div>
+            <div class="card dark">Jenis-Jenis Marka (Garis) Jalan</div>
+            <div class="card green">Jenis Pelanggaran<br>Lalu Lintas</div>
+            <div class="card gray">Artikel atau Blog Edukasi</div>
+            <div class="card blue">Tata Cara Berkendara</div>
+            <div class="card lightgreen">Mini Kuis</div>
+        </div>
+    </main>
+</body>
+</html>

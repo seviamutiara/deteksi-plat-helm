@@ -1,0 +1,75 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard - Kamera Pintar</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <h2>Kamera Pintar</h2>
+            <nav>
+                <a href="#">Dashboard</a>
+                <a href="#">Histori Pelanggaran</a>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header>
+                <h1>Kamera Pintar</h1>
+                <div class="cards">
+                    <div class="card red">
+                        <p>Total pelanggaran hari ini</p>
+                        <span class="icon">❌</span>
+                    </div>
+                    <div class="card red">
+                        <p>Pelanggaran ditindak</p>
+                        <span class="icon">❌</span>
+                    </div>
+                    <div class="card green">
+                        <p>Pelanggaran Selesai</p>
+                        <span class="icon">✅</span>
+                    </div>
+                    <div class="card blue">
+                        <p>Lokasi Kamera aktif</p>
+                        <span class="icon">📍</span>
+                    </div>
+                </div>
+            </header>
+
+            <section class="table-section">
+                <h2>Data pelanggaran</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Gambar</th>
+                            <th>Waktu</th>
+                            <th>Lokasi</th>
+                            <th>Plat nomor</th>
+                            <th>Status</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Data pelanggaran akan dimasukkan di sini -->
+                        {% for pelanggaran in pelanggarans %}
+                        <tr>
+                            <td><img src="{{ pelanggaran.gambar }}" width="100"></td>
+                            <td>{{ pelanggaran.waktu }}</td>
+                            <td>{{ pelanggaran.lokasi }}</td>
+                            <td>{{ pelanggaran.plat_nomor }}</td>
+                            <td>{{ pelanggaran.status }}</td>
+                            <td><a href="#">Detail</a></td>
+                        </tr>
+                        {% empty %}
+                        <tr><td colspan="6">Tidak ada data.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </section>
+        </main>
+    </div>
+</body>
+</html>
