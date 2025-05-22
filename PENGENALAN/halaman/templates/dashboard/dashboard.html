@@ -53,13 +53,14 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- Data pelanggaran akan dimasukkan di sini -->
                         {% for pelanggaran in pelanggarans %}
                         <tr>
-                            <td><img src="{{ pelanggaran.gambar }}" width="100"></td>
-                            <td>{{ pelanggaran.waktu }}</td>
+                            <th>ID</th>
+                            <td>{{ pelanggaran.id_pelanggaran }}</td>
+                            <td><img src="{{ pelanggaran.bukti_gambar.url }}" width="100" alt="Bukti Pelanggaran"></td>
+                            <td>{{ pelanggaran.waktu|date:"d M Y H:i" }}</td>
                             <td>{{ pelanggaran.lokasi }}</td>
-                            <td>{{ pelanggaran.plat_nomor }}</td>
+                            <td>{{ pelanggaran.kendaraan.plat_nomor }}</td>
                             <td>{{ pelanggaran.status }}</td>
                             <td><a href="#">Detail</a></td>
                         </tr>
