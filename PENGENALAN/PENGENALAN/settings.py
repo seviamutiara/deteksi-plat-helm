@@ -38,8 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'akun',
-    'halaman',
-    'pengguna',
 ] 
 
 AUTH_USER_MODEL = 'akun.User'
@@ -79,8 +77,12 @@ WSGI_APPLICATION = 'PENGENALAN.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',  # atau string path lengkap
+         'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'deteksi plat helm',
+        'USER': 'root',
+        'PASSWORD': '',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
     }
 }
 

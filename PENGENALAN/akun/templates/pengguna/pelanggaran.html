@@ -1,0 +1,47 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Histori Pelanggaran - Kamera Pintar</title>
+    <link rel="stylesheet" href="{% static 'main/rambu.css' %}">
+</head>
+<body>
+    <header class="navbar">
+        <div class="logo">Kamera Pintar</div>
+        <nav>
+            <a href="{% url 'home' %}">Dashboard</a>
+            <a href="{% url 'pelanggaran' %}">Pelanggaran</a>
+            <a href="#">Logout</a>
+        </nav>
+    </header>
+
+    <h1>Histori Pelanggaran User</h1>
+    <table border="1" cellpadding="5" cellspacing="0">
+        <thead>
+            <tr>
+                <th>ID Pelanggaran</th>
+                <th>Plat Nomor</th>
+                <th>Waktu</th>
+                <th>Lokasi</th>
+                <th>Status</th>
+                <th>Bukti Gambar</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for p in pelanggarans %}
+            <tr>
+                <td>{{ p.id_pelanggaran }}</td>
+                <td>{{ p.kendaraan.plat_nomor }}</td>
+                <td>{{ p.waktu|date:"d M Y H:i" }}</td>
+                <td>{{ p.lokasi }}</td>
+                <td>{{ p.status }}</td>
+                <td><img src="{{ p.bukti_gambar.url }}" alt="Bukti Gambar" width="100"></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{% url 'home' %}">Kembali ke Home</a>
+</body>
+</html>

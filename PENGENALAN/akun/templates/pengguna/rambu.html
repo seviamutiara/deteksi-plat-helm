@@ -1,0 +1,35 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Jenis Rambu - Kamera Pintar</title>
+    <link rel="stylesheet" href="{% static 'main/rambu.css' %}">
+</head>
+<body>
+    <header class="navbar">
+        <div class="logo">Kamera Pintar</div>
+        <nav>
+            <a href="{% url 'home' %}">Dashboard</a>
+            <a href="{% url 'pelanggaran' %}">Pelanggaran</a>
+            <a href="#">Logout</a>
+        </nav>
+    </header>
+
+     <div class="judul-dengan-gambar">
+        <img src="{% static 'img/motor.png' %}" alt="Scooter Kid" class="hero-image">
+        <h1>Jenis-Jenis Rambu Lalu Lintas</h1>
+    </div>
+
+    <section class="rambu-container">
+        {% for rambu in rambu_list %}
+        <div class="rambu-card">
+    <img src="{% static 'main/rambu/' %}{{ rambu|slugify }}.png" alt="{{ rambu }}">
+    <p>{{ rambu }}</p>
+</div>
+        {% endfor %}
+    </section>
+
+    <a href="{% url 'home' %}">~</a>
+</body>
+</html>

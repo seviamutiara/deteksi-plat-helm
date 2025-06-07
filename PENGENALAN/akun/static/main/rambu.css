@@ -1,0 +1,165 @@
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: #fff;
+}
+
+/* Navbar */
+.navbar {
+    background: #2f2e61;
+    color: #fff;
+    padding: 0rem 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar .logo {
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+.navbar nav a {
+    color: #fff;
+    margin-left: 1.5rem;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+/* Judul dan gambar di atas */
+.judul-dengan-gambar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin: 2rem 0 1rem;
+    padding: 0 1rem;
+    flex-wrap: wrap;
+}
+
+.judul-dengan-gambar h1 {
+    margin: 0;
+    font-size: 28px;
+    font-weight: bold;
+    color: #1a1a1a;
+    text-align: center;
+}
+
+.hero-image {
+    width: 60px;
+    height: auto;
+}
+
+/* Container rambu */
+.container-rambu {
+    max-width: 1000px;
+    margin: 0 auto 2rem;
+    padding: 30px 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Grid container rambu */
+.rambu-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+/* Kartu rambu */
+.rambu-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #f9f9f9;
+    padding: 1rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    width: 160px;
+    transition: transform 0.2s;
+    text-align: center;
+}
+
+.rambu-card:hover {
+    transform: scale(1.05);
+}
+
+.rambu-card img {
+    width: 200px;
+    height: auto;
+    margin-bottom: 0.8rem;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.rambu-card p {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+}
+
+/* Gaya link */
+a {
+    color: #5a4fff;
+    text-decoration: none;
+    font-weight: bold;
+    display: block;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Kartu warna (dashboard opsional) */
+.card {
+    padding: 1rem;
+    border-radius: 10px;
+    text-align: center;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+}
+
+.brown { background-color: #a36d5c; }
+.dark { background-color: #2c3e50; }
+.green { background-color: #5a7d3a; }
+.gray { background-color: #f3dede; color: #444; }
+.blue { background-color: #bfe3fa; color: #444; }
+.lightgreen { background-color: #b6f1c1; color: #444; }
+
+/* Responsive untuk HP */
+@media (max-width: 600px) {
+    .judul-dengan-gambar {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .hero-image {
+        width: 80px;
+    }
+
+    .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .navbar nav {
+        margin-top: 10px;
+    }
+
+    .container-utama {
+        flex-direction: column;
+        padding: 1rem;
+    }
+
+    .rambu-card {
+        width: 100%;
+        max-width: 300px;
+    }
+}

@@ -1,0 +1,30 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Mini Kuis - Kamera Pintar</title>
+    <link rel="stylesheet" href="{% static 'main/rambu.css' %}">
+</head>
+<body>
+    <header class="navbar">
+        <div class="logo">Kamera Pintar</div>
+        <nav>
+            <a href="{% url 'home' %}">Dashboard</a>
+            <a href="{% url 'pelanggaran' %}">Pelanggaran</a>
+            <a href="#">Logout</a>
+        </nav>
+    </header>
+
+    <h1>Mini Kuis</h1>
+    <p><strong>Pertanyaan:</strong> {{ kuis.pertanyaan }}</p>
+    <ul>
+        {% for pilihan in kuis.pilihan %}
+        <li>{{ pilihan }}</li>
+        {% endfor %}
+    </ul>
+    <p><em>Jawaban yang benar: {{ kuis.jawaban }}</em></p>
+
+    <a href="{% url 'home' %}">Kembali ke Home</a>
+</body>
+</html>

@@ -12,31 +12,32 @@
             <h2>Kamera Pintar</h2>
             <nav>
                 <a href="#">Dashboard</a>
-                <a href="#">Histori Pelanggaran</a>
+                <a href="{% url 'history' %}">Histori Pelanggaran</a>
             </nav>
         </aside>
 
         <main class="main-content">
             <header>
                 <h1>Kamera Pintar</h1>
-                <div class="cards">
-                    <div class="card red">
-                        <p>Total pelanggaran hari ini</p>
-                        <span class="icon">❌</span>
-                    </div>
-                    <div class="card red">
-                        <p>Pelanggaran ditindak</p>
-                        <span class="icon">❌</span>
-                    </div>
-                    <div class="card green">
-                        <p>Pelanggaran Selesai</p>
-                        <span class="icon">✅</span>
-                    </div>
-                    <div class="card blue">
-                        <p>Lokasi Kamera aktif</p>
-                        <span class="icon">📍</span>
-                    </div>
-                </div>
+               <div class="cards">
+    <div class="card red">
+        <p>Total pelanggaran hari ini</p>
+        <span class="icon">{{ total_today }}</span>
+    </div>
+    <div class="card red">
+        <p>Pelanggaran ditindak</p>
+        <span class="icon">{{ ditindak }}</span>
+    </div>
+    <div class="card green">
+        <p>Pelanggaran Selesai</p>
+        <span class="icon">{{ selesai }}</span>
+    </div>
+    <div class="card blue">
+        <p>Lokasi Kamera aktif</p>
+        <span class="icon">{{ kamera_aktif }}</span>
+    </div>
+</div>
+
             </header>
 
             <section class="table-section">
@@ -44,6 +45,7 @@
                 <table>
                     <thead>
                         <tr>
+                            <th>ID</th>
                             <th>Gambar</th>
                             <th>Waktu</th>
                             <th>Lokasi</th>
@@ -55,7 +57,7 @@
                     <tbody>
                         {% for pelanggaran in pelanggarans %}
                         <tr>
-                            <th>ID</th>
+        
                             <td>{{ pelanggaran.id_pelanggaran }}</td>
                             <td><img src="{{ pelanggaran.bukti_gambar.url }}" width="100" alt="Bukti Pelanggaran"></td>
                             <td>{{ pelanggaran.waktu|date:"d M Y H:i" }}</td>

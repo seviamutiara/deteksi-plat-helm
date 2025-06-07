@@ -1,67 +1,64 @@
+# akun/views.py
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import PermissionDenied
 from django.contrib import messages
-from django.http import HttpResponseForbidden
 
-# Login View
+# Decorator kustom untuk admin-only
+def admin_required(view_func):
+    @login_required(login_url='login')
+    def _wrapped_view(request, *args, **kwargs):
+        if request.user.is_staff and request.user.role == 'admin':
+            return view_func(request, *args, **kwargs)
+        # Kalau user sudah login tapi bukan admin, tampilkan 403
+        raise PermissionDenied
+    return _wrapped_view
+
+# Decorator kustom untuk user-only
+def user_required(view_func):
+    @login_required(login_url='login')
+    def _wrapped_view(request, *args, **kwargs):
+        if request.user.role == 'user':
+            return view_func(request, *args, **kwargs)
+        raise PermissionDenied
+    return _wrapped_view
+
 def login_view(request):
     if request.user.is_authenticated:
-        # Redirect langsung jika sudah login
         if request.user.role == 'admin':
-            return redirect('admin_dashboard')
+            return redirect('dashboard')
         elif request.user.role == 'user':
-            return redirect('user_dashboard')
+            return redirect('home')
 
     if request.method == 'POST':
         form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
-            username = form.cleaned_data.get('username')
-            password = form.cleaned_data.get('password')
-            user = authenticate(request, username=username, password=password)
-            if user is not None:
+            user = authenticate(
+                request,
+                username=form.cleaned_data['username'],
+                password=form.cleaned_data['password']
+            )
+            if user:
                 login(request, user)
-                # Redirect berdasarkan role
-                if user.role == 'admin':
-                    return redirect('halaman_dashboard')
-                elif user.role == 'user':
-                    return redirect('pengguna_dashboard')
-                else:
-                    messages.error(request, 'Role tidak dikenali.')
-                    logout(request)
-                    return redirect('login')
-            else:
-                messages.error(request, 'Username atau password salah.')
-        else:
-            messages.error(request, 'Form tidak valid.')
+                return redirect('dashboard' if user.role == 'admin' else 'home')
+        messages.error(request, 'Username atau password salah.')
     else:
         form = AuthenticationForm()
-    
+
     return render(request, 'akun/login.html', {'form': form})
 
-
-# Logout View
-@login_required
+@login_required(login_url='login')
 def logout_view(request):
     logout(request)
     messages.success(request, 'Berhasil logout.')
     return redirect('login')
 
-
-# Dashboard untuk Admin
-@login_required
+@admin_required
 def admin_dashboard(request):
-    if request.user.role != 'admin':
-        return HttpResponseForbidden("Anda tidak memiliki akses ke halaman ini.")
-    # Ganti konten di bawah sesuai tampilan dashboard admin
-    return render(request, 'akun/halaman_dashboard.html')
+    return render(request, 'halaman/dashboard.html')
 
-
-# Dashboard untuk User
-@login_required
+@user_required
 def user_dashboard(request):
-    if request.user.role != 'user':
-        return HttpResponseForbidden("Anda tidak memiliki akses ke halaman ini.")
-    # Ganti konten di bawah sesuai tampilan dashboard user
-    return render(request, 'akun/pengguna_home.html')
+    return render(request, 'pengguna/home.html')
