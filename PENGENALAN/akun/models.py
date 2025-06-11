@@ -10,10 +10,6 @@ class User(AbstractUser):
     no_hp = models.CharField(max_length=20, blank=True, null=True)
     alamat = models.TextField(blank=True, null=True)
 
-    def __str__(self):
-        return f"{self.username} ({self.role})"
-    role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='user')
-
 class Kendaraan(models.Model):
     id_kendaraan = models.AutoField(primary_key=True)
     plat_nomor = models.CharField(max_length=15)

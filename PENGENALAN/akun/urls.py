@@ -7,6 +7,12 @@ urlpatterns = [
     path('admin/dashboard/', views.admin_dashboard, name='halaman_dashboard'),  
     path('pengguna/', views.user_dashboard, name='home'),  
 
+    #CRUD Akun
+    path('akun/', views.user_list, name='user_list'),
+    path('akun/tambah/',views.user_create, name='user_create'),
+    path('akun/edit/<int:pk>/', views.user_edit, name='user_edit'),
+    path('akun/hapus/<int:pk>/', views.user_delete, name='user_delete'),    
+
     # pengguna
     path('home', pengguna_views.home, name='home'),
     path('rambu', pengguna_views.rambu, name='rambu'),

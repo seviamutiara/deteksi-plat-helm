@@ -1,0 +1,39 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Hapus Akun</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+<div class="container">
+    <aside class="sidebar">
+        <h2>Kamera Pintar</h2>
+        <nav>
+            <a href="{% url 'dashboard' %}">Dashboard</a>
+            <a href="{% url 'user_list' %}">Kelola Akun</a>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <header>
+            <h1>Hapus Akun</h1>
+        </header>
+
+        <section class="form-section">
+            <div class="card red">
+                <p>Apakah Anda yakin ingin menghapus akun:</p>
+                <h3>{{ user.username }} ({{ user.role }})</h3>
+
+                <form method="POST">
+                    {% csrf_token %}
+                    <button type="submit" class="btn red">Hapus</button>
+                    <a href="{% url 'user_list' %}" class="btn">Batal</a>
+                </form>
+            </div>
+        </section>
+    </main>
+</div>
+</body>
+</html>
