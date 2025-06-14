@@ -1,0 +1,123 @@
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background-color: #f9f9f9;
+    color: #333;
+}
+
+/* ===============================
+   NAVBAR
+=============================== */
+.navbar {
+    background: #2f2e61;
+    color: #fff;
+    padding: 0.8rem 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.navbar .logo {
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+.navbar nav {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.navbar nav a {
+    color: #fff;
+    margin-left: 1.5rem;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.navbar nav a:hover {
+    text-decoration: underline;
+}
+
+
+/* ===============================
+   ISI UTAMA
+=============================== */
+h1 {
+    text-align: center;
+    font-size: 26px;
+    color: #2f2e61;
+    margin-top: 2rem;
+}
+
+ol {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+    font-size: 18px;
+    line-height: 1.6;
+    color: #444;
+}
+
+ol li {
+    margin-bottom: 1rem;
+}
+
+.judul-dengan-gambar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin: 2rem 0 1rem;
+    padding: 0 1rem;
+    flex-wrap: wrap;
+    text-align: center;
+}
+
+.judul-dengan-gambar h1 {
+    font-size: 28px;
+    font-weight: bold;
+    color: #1a1a1a;
+    margin: 0;
+}
+
+.hero-image {
+    width: 60px;
+    height: auto;
+}
+
+/* ===============================
+   LINK UMUM
+=============================== */
+a {
+    color: #5a4fff;
+    text-decoration: none;
+    font-weight: bold;
+    display: inline-block;
+    text-align: center;
+    margin: 1rem auto;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* ===============================
+   RESPONSIVE (UNTUK HP)
+=============================== */
+@media (max-width: 600px) {
+    .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .navbar nav {
+        flex-direction: column;
+        margin-top: 10px;
+    }
+
+    ol {
+        padding: 0 1rem;
+        font-size: 16px;
+    }
+}

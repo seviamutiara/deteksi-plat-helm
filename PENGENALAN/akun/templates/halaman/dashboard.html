@@ -11,8 +11,9 @@
         <aside class="sidebar">
             <h2>Kamera Pintar</h2>
             <nav>
-                <a href="#">Dashboard</a>
+                <a href="{% url 'dashboard' %}">Dashboard</a>
                 <a href="{% url 'history' %}">Histori Pelanggaran</a>
+                <a href="{% url 'kendaraan_list' %}">Data Kendaraan</a>
                 <a href="{% url 'user_list' %}">Kelola Akun</a>
                 <a href="{% url 'logout' %}">Logout</a>
             </nav>
@@ -66,7 +67,13 @@
                             <td>{{ pelanggaran.lokasi }}</td>
                             <td>{{ pelanggaran.kendaraan.plat_nomor }}</td>
                             <td>{{ pelanggaran.status }}</td>
-                            <td><a href="#">Detail</a></td>
+                             {% if pelanggaran.status == "Belum Ditindak" %}
+                                <td><a href="{% url 'kirim_notifikasi' pelanggaran.id_pelanggaran %}" class="btn btn-primary">Kirim Notifikasi</a></td>
+                             {% elif pelanggaran.status == "Ditindak" %}
+                                 <a href="{% url 'tandai_selesai' pelanggaran.id_pelanggaran %}" class="btn btn-success">Tandai Selesai</a>
+                             {% else %}
+                                 <span class="badge badge-success">Selesai</span>
+                             {% endif %}
                         </tr>
                         {% empty %}
                         <tr><td colspan="6">Tidak ada data.</td></tr>

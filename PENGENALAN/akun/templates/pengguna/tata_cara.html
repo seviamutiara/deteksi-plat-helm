@@ -4,25 +4,29 @@
 <head>
     <meta charset="UTF-8">
     <title>Tata Cara Berkendara - Kamera Pintar</title>
-    <link rel="stylesheet" href="{% static 'main/rambu.css' %}">
+    <link rel="stylesheet" href="{% static 'main/tatacara.css' %}">
 </head>
 <body>
     <header class="navbar">
         <div class="logo">Kamera Pintar</div>
         <nav>
             <a href="{% url 'home' %}">Dashboard</a>
-            <a href="{% url 'pelanggaran' %}">Pelanggaran</a>
-            <a href="#">Logout</a>
+            <a href="{% url 'history_pengguna' %}">History Pelanggaran</a>
+             <a href="{% url 'notifikasi' %}">Notifikasi Pelanggaran</a>
+            <a href="{% url 'logout' %}">Logout</a>
         </nav>
     </header>
 
+     <div class="judul-dengan-gambar">
+        <img src="{% static 'img/motor.png' %}" alt="Scooter Kid" class="hero-image">
     <h1>Tata Cara Berkendara yang Benar</h1>
+    </div>
     <ol>
         {% for step in tata_cara_steps %}
         <li>{{ step }}</li>
         {% endfor %}
     </ol>
 
-    <a href="{% url 'home' %}">Kembali ke Home</a>
+    <a href="{% url 'home' %}">~</a>
 </body>
 </html>

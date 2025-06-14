@@ -13,6 +13,7 @@
             <nav>
                 <a href="{% url 'dashboard' %}">Dashboard</a>
                 <a href="{% url 'history' %}">Histori Pelanggaran</a>
+                <a href="{% url 'kendaraan_list' %}">Data Kendaraan</a>
                 <a href="{% url 'user_list' %}">Kelola Akun</a>
                 <a href="{% url 'logout' %}">Logout</a>
             </nav>
@@ -23,11 +24,24 @@
                 <h1>Histori Pelanggaran</h1>
             </header>
 
+            <!-- Tombol Download PDF -->
+            <div style="margin-bottom: 20px;">
+                <a href="{% url 'download_history_pdf' %}" class="btn-download" style="
+                    display: inline-block;
+                    padding: 10px 20px;
+                    background-color: #4CAF50;
+                    color: white;
+                    text-decoration: none;
+                    border-radius: 5px;
+                ">Download PDF</a>
+            </div>
+
             <section class="data-section">
                 <table class="pelanggaran-table">
                     <thead>
                         <tr>
                             <th>ID</th>
+                            <th>Pengguna</th>
                             <th>Plat Nomor</th>
                             <th>Waktu</th>
                             <th>Lokasi</th>
@@ -39,6 +53,7 @@
                         {% for pelanggaran in pelanggarans %}
                         <tr>
                             <td>{{ pelanggaran.id_pelanggaran }}</td>
+                            <td>{{ pelanggaran.kendaraan.user.username }}</td>
                             <td>{{ pelanggaran.kendaraan.plat_nomor }}</td>
                             <td>{{ pelanggaran.waktu|date:"d M Y H:i" }}</td>
                             <td>{{ pelanggaran.lokasi }}</td>

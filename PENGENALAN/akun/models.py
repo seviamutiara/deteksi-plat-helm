@@ -24,10 +24,15 @@ class Kendaraan(models.Model):
 class Pelanggaran(models.Model):
     id_pelanggaran = models.AutoField(primary_key=True)
     kendaraan = models.ForeignKey(Kendaraan, on_delete=models.CASCADE)
+    kamera = models.ForeignKey('Kamera', on_delete=models.SET_NULL, null=True, blank=True)
     waktu = models.DateTimeField()
     lokasi = models.CharField(max_length=200)
     bukti_gambar = models.ImageField(upload_to='pelanggaran/')
-    status = models.CharField(max_length=50)
+    status = models.CharField(max_length=20, choices=[
+        ('Belum Ditindak', 'Belum Ditindak'),
+        ('Ditindak', 'Ditindak'),
+        ('Selesai', 'Selesai'),
+    ])
 
     def __str__(self):
         return f"Pelanggaran {self.id_pelanggaran}"
@@ -44,3 +49,16 @@ class Notifikasi(models.Model):
 
     def __str__(self):
         return f"Notifikasi {self.notif_id}"
+
+class Kamera(models.Model):
+    nama = models.CharField(max_length=100) 
+    lokasi = models.CharField(max_length=200) 
+    status = models.CharField(
+        max_length=10,
+        choices=[('Aktif', 'Aktif'), ('Nonaktif', 'Nonaktif')],
+        default='Aktif'
+    )
+    waktu_ditambahkan = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.nama} - {self.lokasi} ({self.status})"

@@ -4,25 +4,34 @@
 <head>
     <meta charset="UTF-8">
     <title>Artikel Edukasi - Kamera Pintar</title>
-    <link rel="stylesheet" href="{% static 'main/rambu.css' %}">
+    <link rel="stylesheet" href="{% static 'main/artikel.css' %}">
 </head>
 <body>
     <header class="navbar">
         <div class="logo">Kamera Pintar</div>
         <nav>
             <a href="{% url 'home' %}">Dashboard</a>
-            <a href="{% url 'pelanggaran' %}">Pelanggaran</a>
-            <a href="#">Logout</a>
+            <a href="{% url 'history_pengguna' %}">History Pelanggaran</a>
+            <a href="{% url 'logout' %}">Logout</a> 
         </nav>
     </header>
 
-    <h1>Artikel Edukasi</h1>
-    <ul>
-        {% for artikel in artikel_list %}
-        <li><strong>{{ artikel.judul }}</strong> - oleh {{ artikel.penulis }}, {{ artikel.tanggal }}</li>
-        {% endfor %}
-    </ul>
+    <main class="artikel-container">
+        <div class="judul-dengan-gambar">
+        <img src="{% static 'img/motor.png' %}" alt="Scooter Kid" class="hero-image">
+        <h1>Artikel Edukasi</h1>
+        </div>
 
-    <a href="{% url 'home' %}">Kembali ke Home</a>
+        {% for artikel in artikel_list %}
+        <div class="artikel">
+            <h2>{{ artikel.judul }}</h2>
+            <p><strong>Penulis:</strong> {{ artikel.penulis }} | 
+               <strong>Tanggal:</strong> {{ artikel.tanggal|date:"j F Y" }}</p>
+            <img src="{% static 'main/artikel/'|add:artikel.gambar %}" alt="{{ artikel.judul }}" width="300">
+            <p>{{ artikel.isi }}</p>
+        </div>
+        {% endfor %}
+
+    </main>
 </body>
 </html>

@@ -4,15 +4,16 @@
 <head>
     <meta charset="UTF-8">
     <title>Jenis Marka - Kamera Pintar</title>
-    <link rel="stylesheet" href="{% static 'main/rambu.css' %}">
+    <link rel="stylesheet" href="{% static 'main/artikel.css' %}">
 </head>
 <body>
     <header class="navbar">
         <div class="logo">Kamera Pintar</div>
         <nav>
             <a href="{% url 'home' %}">Dashboard</a>
-            <a href="{% url 'pelanggaran' %}">Pelanggaran</a>
-            <a href="#">Logout</a>
+            <a href="{% url 'history_pengguna' %}">Pelanggaran</a>
+             <a href="{% url 'notifikasi' %}">Notifikasi Pelanggaran</a>
+            <a href="{% url 'logout' %}">Logout</a>
         </nav>
     </header>
 
@@ -28,7 +29,5 @@
         </div>
         {% endfor %}
     </section>
-
-    <a href="{% url 'home' %}">~</a>
 </body>
 </html>

@@ -1,0 +1,51 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Notifikasi Saya</title>
+    <link rel="stylesheet" href="{% static 'main/artikel.css' %}">
+</head>
+<body>
+    <header class="navbar">
+        <div class="logo">Kamera Pintar</div>
+        <nav>
+            <a href="{% url 'home' %}">Dashboard</a>
+            <a href="{% url 'history_pengguna' %}">History Pelanggaran</a>
+            <a href="{% url 'logout' %}">Logout</a>
+        </nav>
+    </header>
+
+    <div class="judul-dengan-gambar">
+        <img src="{% static 'img/motor.png' %}" alt="Scooter Kid" class="hero-image">
+    <div class="container">
+        <h2>Notifikasi Pelanggaran Anda</h2>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Pelanggaran</th>
+                    <th>Status Baca</th>
+                    <th>Metode</th>
+                    <th>Tanggal Dikirim</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for notif in notifikasi_list %}
+                <tr>
+                    <td>{{ notif.notif_id }}</td>
+                    <td>{{ notif.pelanggaran.lokasi }} ({{ notif.pelanggaran.waktu|date:"d M Y H:i" }})</td>
+                    <td>{{ notif.status_baca|yesno:"Sudah,Belum" }}</td>
+                    <td>{{ notif.metode }}</td>
+                    <td>{{ notif.tanggal_kirim|date:"d M Y H:i" }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" style="text-align: center;">Belum ada notifikasi</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

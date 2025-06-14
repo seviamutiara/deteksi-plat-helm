@@ -4,11 +4,13 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.contrib import messages
+from django.utils import timezone
+from django.core.mail import send_mail
+from .models import Pelanggaran, Notifikasi
 
 from .models import User
 from .forms import CustomUserCreationForm, CustomUserChangeForm
 
-# Decorator kustom untuk admin-only
 def admin_required(view_func):
     @login_required(login_url='login')
     def _wrapped_view(request, *args, **kwargs):
@@ -17,7 +19,7 @@ def admin_required(view_func):
         raise PermissionDenied
     return _wrapped_view
 
-# Decorator kustom untuk user-only
+
 def user_required(view_func):
     @login_required(login_url='login')
     def _wrapped_view(request, *args, **kwargs):
@@ -64,14 +66,11 @@ def admin_dashboard(request):
 def user_dashboard(request):
     return render(request, 'pengguna/home.html')
 
-# ============================
-# CRUD Akun Login (Admin Only)
-# ============================
 
 @admin_required
 def user_list(request):
     users = User.objects.all().order_by('-id')
-    return render(request, 'akun/user_list.html', {'users': users})
+    return render(request, 'halaman/user_list.html', {'users': users})
 
 @admin_required
 def user_create(request):
@@ -85,7 +84,7 @@ def user_create(request):
             print("❌ Form errors:", form.errors)
     else:
         form = CustomUserCreationForm()
-    return render(request, 'akun/user_form.html', {'form': form, 'title': 'Tambah Akun'})
+    return render(request, 'halaman/user_form.html', {'form': form, 'title': 'Tambah Akun'})
 
 @admin_required
 def user_edit(request, pk):
@@ -98,7 +97,7 @@ def user_edit(request, pk):
     else:
         form = CustomUserChangeForm(instance=user)
 
-    return render(request, 'akun/user_form.html', {'form': form, 'title': 'Edit Akun'})
+    return render(request, 'halaman/user_form.html', {'form': form, 'title': 'Edit Akun'})
 
 @admin_required
 def user_delete(request, pk):
@@ -107,4 +106,52 @@ def user_delete(request, pk):
         user.delete()
         messages.success(request, 'Akun berhasil dihapus.')
         return redirect('user_list')
-    return render(request, 'akun/user_confirm_delete.html', {'user': user})
+    return render(request, 'halaman/user_confirm_delete.html', {'user': user})
+
+@login_required
+def kirim_notifikasi(request, pelanggaran_id):
+    pelanggaran = get_object_or_404(Pelanggaran, id_pelanggaran=pelanggaran_id)
+    pengguna = pelanggaran.kendaraan.user  
+    admin = request.user  
+
+    subject = "Notifikasi Pelanggaran Lalu Lintas"
+    message = f"""
+    Halo {pengguna.username},
+
+    Anda telah melakukan pelanggaran lalu lintas:
+    - Lokasi: {pelanggaran.lokasi}
+    - Waktu: {pelanggaran.waktu.strftime('%d-%m-%Y %H:%M')}
+    - Plat Nomor: {pelanggaran.kendaraan.plat_nomor}
+
+    Silakan tindak lanjuti pelanggaran Anda.
+
+    Terima kasih,
+    Kamera Pintar
+    """
+    send_mail(subject, message, 'vikraselpian@gmail.com', [pengguna.email])
+
+    Notifikasi.objects.create(
+        user=pengguna,
+        pelanggaran=pelanggaran,
+        admin=admin,
+        metode='Email',
+        tanggal_kirim=timezone.now(),
+        status_baca=False
+    )
+
+    pelanggaran.status = "Ditindak"
+    pelanggaran.save()
+
+    return redirect('halaman/dashboard')
+
+@login_required
+def tandai_selesai(request, pelanggaran_id):
+    pelanggaran = get_object_or_404(Pelanggaran, id_pelanggaran=pelanggaran_id)
+    pelanggaran.status = "Selesai"
+    pelanggaran.save()
+    return redirect('halaman/dashboard')
+
+@login_required
+def notifikasi_user_view(request):
+    notifikasi = Notifikasi.objects.filter(user=request.user).order_by('-tanggal_kirim')
+    return render(request, 'pengguna/notifikasi.html', {'notifikasi': notifikasi})

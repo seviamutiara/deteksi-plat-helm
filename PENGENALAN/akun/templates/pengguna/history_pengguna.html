@@ -4,19 +4,22 @@
 <head>
     <meta charset="UTF-8">
     <title>Histori Pelanggaran - Kamera Pintar</title>
-    <link rel="stylesheet" href="{% static 'main/rambu.css' %}">
+    <link rel="stylesheet" href="{% static 'main/artikel.css' %}">
 </head>
 <body>
     <header class="navbar">
         <div class="logo">Kamera Pintar</div>
         <nav>
             <a href="{% url 'home' %}">Dashboard</a>
-            <a href="{% url 'pelanggaran' %}">Pelanggaran</a>
-            <a href="#">Logout</a>
+            <a href="{% url 'notifikasi' %}">Notifikasi Pelanggaran</a>
+            <a href="{% url 'logout' %}">Logout</a>
         </nav>
     </header>
 
+    <div class="judul-dengan-gambar">
+        <img src="{% static 'img/motor.png' %}" alt="Scooter Kid" class="hero-image">
     <h1>Histori Pelanggaran User</h1>
+    </div>
     <table border="1" cellpadding="5" cellspacing="0">
         <thead>
             <tr>
@@ -36,12 +39,12 @@
                 <td>{{ p.waktu|date:"d M Y H:i" }}</td>
                 <td>{{ p.lokasi }}</td>
                 <td>{{ p.status }}</td>
-                <td><img src="{{ p.bukti_gambar.url }}" alt="Bukti Gambar" width="100"></td>
+                <td><img src="{{ p.bukti_gambar.url }}" width="80"></td>
             </tr>
+            {% empty %}
+            <tr><td colspan="6">Anda belum memiliki pelanggaran.</td></tr>
             {% endfor %}
         </tbody>
     </table>
-
-    <a href="{% url 'home' %}">Kembali ke Home</a>
 </body>
 </html>

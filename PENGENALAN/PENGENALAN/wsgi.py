@@ -8,6 +8,8 @@ https://docs.djangoproject.com/en/5.2/howto/deployment/wsgi/
 """
 
 import os
+import mqtt.mqtt_handler
+mqtt.mqtt_handler.run_mqtt_thread()
 
 from django.core.wsgi import get_wsgi_application
 
