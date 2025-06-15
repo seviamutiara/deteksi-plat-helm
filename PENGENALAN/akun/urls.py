@@ -1,9 +1,14 @@
 from django.urls import path
 from . import views,pengguna_views,halaman_views
 
+
 urlpatterns = [
     path('login/', views.login_view, name='login'),
     path('logout/', views.logout_view, name='logout'), 
+    path('lupa-password/', views.CustomPasswordResetView.as_view(), name='password_reset'),
+    path('lupa-password/dikirim/', views.CustomPasswordResetDoneView.as_view(), name='password_reset_done'),
+    path('reset/<uidb64>/<token>/', views.CustomPasswordResetConfirmView.as_view(), name='password_reset_confirm'),
+    path('reset-password-selesai/', views.CustomPasswordResetCompleteView.as_view(), name='password_reset_complete'),
 
     #CRUD Akun
     path('halaman/', views.user_list, name='user_list'),

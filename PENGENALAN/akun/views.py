@@ -5,8 +5,10 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.contrib import messages
 from django.utils import timezone
+from django.contrib.auth import views as auth_views
 from django.core.mail import send_mail
 from .models import Pelanggaran, Notifikasi
+
 
 from .models import User
 from .forms import CustomUserCreationForm, CustomUserChangeForm
@@ -65,6 +67,22 @@ def admin_dashboard(request):
 @user_required
 def user_dashboard(request):
     return render(request, 'pengguna/home.html')
+
+class CustomPasswordResetView(auth_views.PasswordResetView):
+    template_name = 'akun/lupa_password.html'
+    email_template_name = 'akun/email_reset_password.html'
+    subject_template_name = 'akun/subject_reset_password.txt'
+
+class CustomPasswordResetDoneView(auth_views.PasswordResetDoneView):
+    template_name = 'akun/lupa_password_dikirim.html'
+    success_url = 'akun/lupa-password/dikirim/'
+
+class CustomPasswordResetConfirmView(auth_views.PasswordResetConfirmView):
+    template_name = 'akun/reset_password_konfirmasi.html'
+
+class CustomPasswordResetCompleteView(auth_views.PasswordResetCompleteView):
+    template_name = 'akun/reset_password_selesai.html'
+    success_url = 'akun/reset-password-selesai/'
 
 
 @admin_required
