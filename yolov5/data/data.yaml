@@ -1,0 +1,5 @@
+train: D:/deteksi-plat-helm/yolov5/dataset/images/train
+val: D:/deteksi-plat-helm/yolov5/dataset/images/val
+
+nc: 1  
+names: ['helmet']  # nama-nama kelas

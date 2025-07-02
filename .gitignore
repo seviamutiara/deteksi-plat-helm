@@ -22,3 +22,5 @@ model/
 # Abaikan logs
 *.log
 venv/ 
+
+.env

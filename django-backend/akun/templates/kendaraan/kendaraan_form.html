@@ -1,0 +1,33 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Tambah Kendaraan</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <h2>Kamera Pintar</h2>
+            <nav>
+                <a href="{% url 'dashboard' %}">Dashboard</a>
+                <a href="{% url 'history' %}">Histori Pelanggaran</a>
+                <a href="{% url 'kendaraan_list' %}">Data Kendaraan</a>
+                <a href="{% url 'user_list' %}">Kelola Akun</a>
+                <a href="{% url 'logout' %}">Logout</a>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <h1>Tambah Data Kendaraan</h1>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn">Simpan</button>
+                <a href="{% url 'kendaraan_list' %}">Kembali</a>
+            </form>
+        </main>
+    </div>
+</body>
+</html>
