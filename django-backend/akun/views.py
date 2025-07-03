@@ -184,3 +184,4 @@ def daftar_plat_terdaftar(request):
     plat_list = list(Kendaraan.objects.values_list('plat_nomor', flat=True))
     data = {"plat_terdaftar": plat_list}
     return JsonResponse(data)
+

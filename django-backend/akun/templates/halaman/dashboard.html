@@ -68,14 +68,22 @@
                             <td>{{ pelanggaran.lokasi }}</td>
                             <td>{{ pelanggaran.plate_number }}</td>
                             <td>{{ pelanggaran.status }}</td>
+                            <td>
+                                {% if pelanggaran.status == "Belum Ditindak" %}
+                                    <a href="{% url 'kirim_notifikasi' pelanggaran.id_pelanggaran %}" class="btn btn-primary">Kirim Notifikasi</a>
+                                {% elif pelanggaran.status == "Ditindak" %}
+                                    <a href="{% url 'tandai_selesai' pelanggaran.id_pelanggaran %}" class="btn btn-success">Tandai Selesai</a>
+                                {% else %}
+                                    <span class="badge badge-success">Selesai</span>
+                                {% endif %}
 
-                            {% if pelanggaran.status == "Belum Ditindak" %}
-                                <td><a href="{% url 'kirim_notifikasi' pelanggaran.id_pelanggaran %}" class="btn btn-primary">Kirim Notifikasi</a></td>
-                            {% elif pelanggaran.status == "Ditindak" %}
-                                <td><a href="{% url 'tandai_selesai' pelanggaran.id_pelanggaran %}" class="btn btn-success">Tandai Selesai</a></td>
-                            {% else %}
-                                <td><span class="badge badge-success">Selesai</span></td>
-                            {% endif %}
+                                <!-- Tombol Hapus -->
+                                <a href="{% url 'hapus_pelanggaran' pelanggaran.id_pelanggaran %}"
+                                   class="btn btn-danger"
+                                   onclick="return confirm('Yakin ingin menghapus data ini?')">
+                                   Hapus
+                                </a>
+                            </td>
                         </tr>
                         {% empty %}
                         <tr><td colspan="7">Tidak ada data.</td></tr>

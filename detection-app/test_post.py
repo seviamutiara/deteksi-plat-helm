@@ -17,7 +17,7 @@ payload = {
 }
 
 # KIRIM KE API DJANGO
-response = requests.post("http://localhost:8000/akun/api/violations/", json=payload)
+response = requests.post("http://localhost:8000/api/violations/", json=payload)
 
 # CEK HASIL
 print("Status:", response.status_code)

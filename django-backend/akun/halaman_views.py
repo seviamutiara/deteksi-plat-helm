@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Kendaraan, Pelanggaran, Kamera
 from .forms import KendaraanForm  
 from django.contrib.auth.models import User
@@ -104,4 +104,8 @@ def download_histori_pdf(request):
         'Content-Disposition': 'attachment; filename="histori_pelanggaran.pdf"',
     })
 
-# MQTT tetap biarkan seperti sebelumnya jika sudah jalan
+# ✅ Fungsi hapus pelanggaran
+def hapus_pelanggaran(request, id):
+    pelanggaran = get_object_or_404(Pelanggaran, id_pelanggaran=id)
+    pelanggaran.delete()
+    return redirect('dashboard')

@@ -33,6 +33,8 @@ urlpatterns = [
     path('kendaraan/tambah/', halaman_views.kendaraan_create, name='kendaraan_create'),
     path('history/', halaman_views.histori_pelanggaran, name='history'),
     path('histori/download/', halaman_views.download_histori_pdf, name='download_history_pdf'),
+    path('pelanggaran/hapus/<int:id>/', halaman_views.hapus_pelanggaran, name='hapus_pelanggaran'),
+
 
     # Notifikasi
     path('notifikasi/<int:pelanggaran_id>/kirim/', views.kirim_notifikasi, name='kirim_notifikasi'),
