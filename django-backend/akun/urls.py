@@ -40,6 +40,8 @@ urlpatterns = [
     path('notifikasi/<int:pelanggaran_id>/kirim/', views.kirim_notifikasi, name='kirim_notifikasi'),
     path('notifikasi/saya/', views.notifikasi_user_view, name='notifikasi'),
     path('pelanggaran/<int:pelanggaran_id>/selesai/', views.tandai_selesai, name='tandai_selesai'),
+    path('pelanggaran/<int:pelanggaran_id>/bayar/', views.pengguna_bayar_sanksi, name='pengguna_bayar_sanksi'),
+
 
     # API
     path('api/violations/', views.api_tambah_pelanggaran, name='api_tambah_pelanggaran'),

@@ -47,6 +47,7 @@ class Pelanggaran(models.Model):
         ('Selesai', 'Selesai'),
     ], default='Belum Ditindak')
     kamera = models.ForeignKey(Kamera, on_delete=models.SET_NULL, null=True, blank=True)
+    jumlah_denda = models.DecimalField(max_digits=10, decimal_places=2, default=100000.00)  # Denda default Rp 100.000
 
     def __str__(self):
         return f"Pelanggaran {self.id_pelanggaran} - {self.plate_number}"

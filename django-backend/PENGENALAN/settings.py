@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'akun.apps.AkunConfig',
     'rest_framework',
+    'django.contrib.humanize',
     
 ] 
 
