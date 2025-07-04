@@ -1,8 +1,10 @@
-Django==4.2.10
-djangorestframework==3.15.1
-pillow==11.1.0
-python-dotenv==1.0.1
-PyYAML==6.0.2
-paho-mqtt==1.6.1
-reportlab==4.1.0
-
+Django==4.2.10          # Versi Django Anda
+djangorestframework==3.15.1 # Django REST Framework untuk API
+pillow==11.1.0          # Diperlukan Django untuk ImageField
+python-dotenv==1.0.1    # Untuk mengelola variabel lingkungan (misal Secret Key, Database credentials)
+PyYAML==6.0.2           # Sering digunakan untuk konfigurasi
+paho-mqtt==1.6.1        # Untuk komunikasi MQTT (jika backend Django Anda juga menjadi subscriber)
+reportlab==4.1.0        # Jika Anda membuat laporan PDF dari Django (sesuai yang Anda cantumkan)
+mysqlclient==2.2.4      # <--- DITAMBAHKAN: Konektor MySQL standar untuk Django
+pymysql==1.1.1          # <--- DITAMBAHKAN: Diperlukan karena kode Anda (PENGENALAN/__init__.py) mengimpornya
+gunicorn==22.0.0        # <--- DITAMBAHKAN: Web Server Gateway Interface (WSGI) untuk produksi di Raspberry Pi
