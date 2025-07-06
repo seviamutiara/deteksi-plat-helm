@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
 from .models import Kendaraan, Pelanggaran, Kamera
 from .forms import KendaraanForm  
 from django.contrib.auth.models import User
@@ -50,6 +51,7 @@ def pelanggaran_list(request):
         'kamera_aktif': kamera_aktif,
     })
 
+@login_required
 def histori_pelanggaran(request):
     user = request.user
     if user.is_staff:
@@ -66,6 +68,7 @@ def histori_pelanggaran(request):
 
     return render(request, template, {'pelanggarans': pelanggarans})
 
+@login_required
 def download_histori_pdf(request):
     user = request.user
     if user.is_staff:
