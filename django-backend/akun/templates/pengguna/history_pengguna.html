@@ -18,8 +18,9 @@
 
     <div class="judul-dengan-gambar">
         <img src="{% static 'img/motor.png' %}" alt="Scooter Kid" class="hero-image">
-    <h1>Histori Pelanggaran User</h1>
+        <h1>Histori Pelanggaran User</h1>
     </div>
+
     <table border="1" cellpadding="5" cellspacing="0">
         <thead>
             <tr>
@@ -39,7 +40,13 @@
                 <td>{{ p.waktu|date:"d M Y H:i" }}</td>
                 <td>{{ p.lokasi }}</td>
                 <td>{{ p.status }}</td>
-                <td><img src="{{ p.bukti_gambar.url }}" width="80"></td>
+                <td>
+                    {% if p.image_base64 %}
+                        <img src="data:image/jpeg;base64,{{ p.image_base64 }}" width="80" alt="Bukti Pelanggaran">
+                    {% else %}
+                        Tidak ada gambar
+                    {% endif %}
+                </td>
             </tr>
             {% empty %}
             <tr><td colspan="6">Anda belum memiliki pelanggaran.</td></tr>
