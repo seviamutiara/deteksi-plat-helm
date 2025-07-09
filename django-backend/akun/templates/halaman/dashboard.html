@@ -6,6 +6,7 @@
     <meta charset="UTF-8">
     <title>Dashboard - Kamera Pintar</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         * {
             box-sizing: border-box;
@@ -284,14 +285,6 @@
                     {% endfor %}
                 </tbody>
             </table>
-
-            {% if messages %}
-            <ul class="messages">
-                {% for message in messages %}
-                    <li class="{{ message.tags }}">{{ message }}</li>
-                {% endfor %}
-            </ul>
-            {% endif %}
         </section>
     </main>
 </div>
@@ -312,6 +305,19 @@
         document.getElementById("imageModal").style.display = "none";
     }
 </script>
+
+<!-- SweetAlert Message -->
+{% if messages %}
+<script>
+    {% for message in messages %}
+        Swal.fire({
+            icon: "{% if message.tags == 'error' %}error{% elif message.tags == 'success' %}success{% else %}warning{% endif %}",
+            title: "{{ message|escapejs }}",
+            confirmButtonText: "OK"
+        });
+    {% endfor %}
+</script>
+{% endif %}
 
 {% include "partials/footer.html" %}
 </body>
