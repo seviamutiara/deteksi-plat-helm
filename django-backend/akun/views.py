@@ -132,7 +132,7 @@ def kirim_notifikasi(request, pelanggaran_id):
         - Waktu: {pelanggaran.waktu.strftime('%d-%m-%Y %H:%M')}
         - Plat Nomor: {pelanggaran.plate_number}
 
-        Silakan tindak lanjuti pelanggaran Anda.
+        Silakan tindak lanjuti pelanggaran Anda Dengan Membayar Sanksi
 
         Terima kasih,
         Kamera Pintar
@@ -164,6 +164,38 @@ def tandai_selesai(request, pelanggaran_id):
 def notifikasi_user_view(request):
     notifikasi = Notifikasi.objects.filter(user=request.user).order_by('-tanggal_kirim')
     return render(request, 'pengguna/notifikasi.html', {'notifikasi': notifikasi})
+
+@login_required
+def pengguna_bayar_sanksi(request, id_pelanggaran):
+    pelanggaran = get_object_or_404(Pelanggaran, id_pelanggaran=id_pelanggaran, kendaraan__user=request.user)
+
+    if request.method == 'POST':
+        bukti = request.FILES.get('bukti_pembayaran')
+
+        if bukti:
+            pelanggaran.bukti_pembayaran = bukti
+            pelanggaran.status = 'Selesai'
+            pelanggaran.save()
+
+            messages.success(request, "Bukti pembayaran berhasil dikirim.")
+            return redirect('notifikasi_html')
+        else:
+            messages.error(request, "Silakan unggah bukti pembayaran terlebih dahulu.")
+
+    return render(request, 'pengguna/form_pembayaran.html', {'pelanggaran': pelanggaran})
+
+@login_required
+def verifikasi_pembayaran(request, id_pelanggaran):
+    pelanggaran = get_object_or_404(Pelanggaran, id_pelanggaran=id_pelanggaran)
+
+    if pelanggaran.bukti_pembayaran and pelanggaran.status == 'Ditindak':
+        pelanggaran.status = 'Selesai'
+        pelanggaran.save()
+        messages.success(request, "Pembayaran berhasil diverifikasi.")
+    else:
+        messages.error(request, "Bukti pembayaran belum tersedia atau status tidak sesuai.")
+
+    return redirect('dashboard')
 
 # === API ENDPOINT ===
 from rest_framework.decorators import api_view

@@ -44,10 +44,12 @@ class Pelanggaran(models.Model):
     status = models.CharField(max_length=20, choices=[
         ('Belum Ditindak', 'Belum Ditindak'),
         ('Ditindak', 'Ditindak'),
+        ('Menunggu Verifikasi', 'Menunggu Verifikasi'),
         ('Selesai', 'Selesai'),
     ], default='Belum Ditindak')
     kamera = models.ForeignKey(Kamera, on_delete=models.SET_NULL, null=True, blank=True)
     jumlah_denda = models.DecimalField(max_digits=10, decimal_places=2, default=100000.00)  # Denda default Rp 100.000
+    bukti_pembayaran = models.ImageField(upload_to='bukti_pembayaran/', null=True, blank=True)
 
     def __str__(self):
         return f"Pelanggaran {self.id_pelanggaran} - {self.plate_number}"

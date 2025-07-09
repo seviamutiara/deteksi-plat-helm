@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.contrib.auth.hashers import make_password
 from .models import User, Kendaraan
+from .models import Pelanggaran
 
 # === FORM AKUN ===
 class CustomUserCreationForm(UserCreationForm):
@@ -66,3 +67,12 @@ class KendaraanForm(forms.ModelForm):
     class Meta:
         model = Kendaraan
         fields = ['plat_nomor', 'jenis_kendaraan', 'foto_kendaraan', 'user']
+
+# === BUKTI PEMBAYARAN FORM ===
+class BuktiPembayaranForm(forms.ModelForm):
+    class Meta:
+        model = Pelanggaran
+        fields = ['bukti_pembayaran']
+        widgets = {
+            'bukti_pembayaran': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+        }
