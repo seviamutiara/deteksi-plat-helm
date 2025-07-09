@@ -5,6 +5,45 @@
     <meta charset="UTF-8">
     <title>Histori Pelanggaran - Kamera Pintar</title>
     <link rel="stylesheet" href="{% static 'main/artikel.css' %}">
+    <style>
+        /* Pop-up modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+        }
+
+        .modal-content {
+            display: block;
+            margin: 60px auto;
+            max-width: 80%;
+            max-height: 80%;
+            border: 5px solid white;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 40px;
+            font-size: 40px;
+            color: white;
+            cursor: pointer;
+        }
+
+        .thumbnail {
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .thumbnail:hover {
+            opacity: 0.8;
+        }
+    </style>
 </head>
 <body>
     <header class="navbar">
@@ -36,22 +75,50 @@
             {% for p in pelanggarans %}
             <tr>
                 <td>{{ p.id_pelanggaran }}</td>
-                <td>{{ p.kendaraan.plat_nomor }}</td>
+                <td>{{ p.plate_number }}</td>
                 <td>{{ p.waktu|date:"d M Y H:i" }}</td>
                 <td>{{ p.lokasi }}</td>
                 <td>{{ p.status }}</td>
                 <td>
                     {% if p.image_base64 %}
-                        <img src="data:image/jpeg;base64,{{ p.image_base64 }}" width="80" alt="Bukti Pelanggaran">
+                        <img src="data:image/jpeg;base64,{{ p.image_base64 }}" width="80"
+                             class="thumbnail" alt="Bukti"
+                             onclick="showModal(this)">
                     {% else %}
                         Tidak ada gambar
                     {% endif %}
                 </td>
             </tr>
-            {% empty %}
-            <tr><td colspan="6">Anda belum memiliki pelanggaran.</td></tr>
             {% endfor %}
         </tbody>
     </table>
+
+    <!-- Modal HTML -->
+    <div id="imgModal" class="modal">
+        <span class="modal-close" onclick="closeModal()">&times;</span>
+        <img class="modal-content" id="modalImage">
+    </div>
+
+    <!-- Modal Script -->
+    <script>
+        function showModal(img) {
+            const modal = document.getElementById("imgModal");
+            const modalImg = document.getElementById("modalImage");
+            modal.style.display = "block";
+            modalImg.src = img.src;
+        }
+
+        function closeModal() {
+            document.getElementById("imgModal").style.display = "none";
+        }
+
+        // Close modal on click outside
+        window.onclick = function(event) {
+            const modal = document.getElementById("imgModal");
+            if (event.target === modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
 </body>
 </html>
