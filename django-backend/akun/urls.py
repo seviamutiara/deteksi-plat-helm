@@ -22,11 +22,7 @@ urlpatterns = [
     # Pengguna
     path('pengguna/', views.user_dashboard, name='user_dashboard'),
     path('home/', pengguna_views.home, name='home'),
-    path('rambu/', pengguna_views.rambu, name='rambu'),
-    path('marka/', pengguna_views.marka, name='marka'),
-    path('artikel/', pengguna_views.artikel, name='artikel'),
-    path('tata_cara/', pengguna_views.tata_cara, name='tata_cara'),
-
+    
     # Admin dan Data
     path('dashboard/', halaman_views.pelanggaran_list, name='dashboard'),
     path('kendaraan/', halaman_views.kendaraan_list, name='kendaraan_list'),
@@ -34,13 +30,14 @@ urlpatterns = [
     path('history/', halaman_views.histori_pelanggaran, name='history'),
     path('histori/download/', halaman_views.download_histori_pdf, name='download_history_pdf'),
     path('pelanggaran/hapus/<int:id>/', halaman_views.hapus_pelanggaran, name='hapus_pelanggaran'),
+    path('dashboard/pelanggaran/<int:id_pelanggaran>/verifikasi/', views.verifikasi_pembayaran, name='verifikasi_pembayaran'),
 
 
     # Notifikasi
-    path('notifikasi/<int:pelanggaran_id>/kirim/', views.kirim_notifikasi, name='kirim_notifikasi'),
+    path('notifikasi/<int:id_pelanggaran>/kirim/', views.kirim_notifikasi, name='kirim_notifikasi'),
     path('notifikasi/saya/', views.notifikasi_user_view, name='notifikasi'),
-    path('pelanggaran/<int:pelanggaran_id>/selesai/', views.tandai_selesai, name='tandai_selesai'),
-    path('pelanggaran/<int:pelanggaran_id>/bayar/', views.pengguna_bayar_sanksi, name='pengguna_bayar_sanksi'),
+    path('pelanggaran/<int:id_pelanggaran>/selesai/', views.tandai_selesai, name='tandai_selesai'),
+    path('pelanggaran/<int:id_pelanggaran>/bayar/', views.pengguna_bayar_sanksi, name='pengguna_bayar_sanksi'),
 
 
     # API

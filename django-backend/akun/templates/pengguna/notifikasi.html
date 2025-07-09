@@ -5,80 +5,208 @@
     <meta charset="UTF-8">
     <title>Notifikasi Saya</title>
     <link rel="stylesheet" href="{% static 'main/artikel.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar {
+            background-color: #2E2E69;
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar .logo {
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .navbar nav a {
+            color: white;
+            margin-left: 1.5rem;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .navbar nav a:hover {
+            color: #FFD700;
+        }
+
+        .judul-dengan-gambar {
+            text-align: center;
+            margin: 2rem auto;
+        }
+
+        .judul-dengan-gambar img {
+            max-height: 120px;
+            margin-bottom: 1rem;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1100px;
+            margin: auto;
+            background-color: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        h2 {
+            color: #2E2E69;
+            margin-bottom: 1.5rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f0f2f5;
+            color: #2E2E69;
+        }
+
+        tr:hover {
+            background-color: #f9f9f9;
+        }
+
         .btn-success {
             background-color: #28a745;
             color: white;
-            padding: 4px 8px;
+            padding: 6px 12px;
             border: none;
-            border-radius: 5px;
+            border-radius: 6px;
             cursor: pointer;
+            font-size: 0.9rem;
         }
+
+        .btn-success:hover {
+            background-color: #218838;
+        }
+
         .badge {
-            padding: 4px 8px;
+            padding: 5px 10px;
             border-radius: 5px;
-            font-size: 0.9em;
+            font-weight: 500;
+            font-size: 0.9rem;
         }
+
         .bg-success {
             background-color: #28a745;
             color: white;
         }
+
+        .bg-warning {
+            background-color: #ffc107;
+            color: #333;
+        }
+
+        .bg-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            table {
+                font-size: 0.85rem;
+            }
+
+            .navbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .navbar nav {
+                margin-top: 0.5rem;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+        }
     </style>
 </head>
 <body>
+
+    <!-- NAVBAR -->
     <header class="navbar">
         <div class="logo">Kamera Pintar</div>
         <nav>
             <a href="{% url 'home' %}">Dashboard</a>
-            <a href="{% url 'history' %}">History Pelanggaran</a>
+            <a href="{% url 'history' %}">Riwayat</a>
             <a href="{% url 'logout' %}">Logout</a>
         </nav>
     </header>
 
+    <!-- JUDUL + GAMBAR -->
     <div class="judul-dengan-gambar">
-        <img src="{% static 'img/motor.png' %}" alt="Scooter Kid" class="hero-image">
-        <div class="container">
-            <h2>Notifikasi Pelanggaran Anda</h2>
-            <table border="1">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Pelanggaran</th>
-                        <th>Status Baca</th>
-                        <th>Metode</th>
-                        <th>Tanggal Dikirim</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for notif in notifikasi %}
-                    <tr>
-                        <td>{{ notif.notif_id }}</td>
-                        <td>{{ notif.pelanggaran.lokasi }} ({{ notif.pelanggaran.waktu|date:"d M Y H:i" }})</td>
-                        <td>{{ notif.status_baca|yesno:"Sudah,Belum" }}</td>
-                        <td>{{ notif.metode }}</td>
-                        <td>{{ notif.tanggal_kirim|date:"d M Y H:i" }}</td>
-                        <td>
-                            {% if notif.pelanggaran.status == "Ditindak" %}
+        <img src="{% static 'img/motor.png' %}" alt="Scooter Kid">
+    </div>
+
+    <!-- ISI TABEL -->
+    <div class="container">
+        <h2>Notifikasi Pelanggaran Anda</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Pelanggaran</th>
+                    <th>Status Baca</th>
+                    <th>Metode</th>
+                    <th>Tanggal Dikirim</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for notif in notifikasi %}
+                <tr>
+                    <td>{{ notif.notif_id }}</td>
+                    <td>{{ notif.pelanggaran.lokasi }} ({{ notif.pelanggaran.waktu|date:"d M Y H:i" }})</td>
+                    <td>
+                        {% if notif.status_baca %}
+                            <span class="badge bg-success">Sudah</span>
+                        {% else %}
+                            <span class="badge bg-warning">Belum</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ notif.metode }}</td>
+                    <td>{{ notif.tanggal_kirim|date:"d M Y H:i" }}</td>
+                    <td>
+                        {% if notif.pelanggaran.status == "Ditindak" %}
                             <form action="{% url 'pengguna_bayar_sanksi' notif.pelanggaran.id_pelanggaran %}" method="post" style="display:inline;">
                                 {% csrf_token %}
                                 <button class="btn-success" type="submit">Bayar & Selesaikan</button>
                             </form>
-                            {% elif notif.pelanggaran.status == "Selesai" %}
+                        {% elif notif.pelanggaran.status == "Selesai" %}
                             <span class="badge bg-success">Selesai</span>
-                            {% else %}
-                            <span class="badge">Belum Ditindak</span>
-                            {% endif %}
-                        </td>
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <td colspan="6" style="text-align: center;">Belum ada notifikasi</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
+                        {% else %}
+                            <span class="badge bg-secondary">Belum Ditindak</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6">Belum ada notifikasi untuk Anda.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 </body>
+{% include "partials/footer.html" %}
 </html>

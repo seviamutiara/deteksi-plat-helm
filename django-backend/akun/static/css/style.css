@@ -38,11 +38,13 @@ body {
 }
 
 /* Konten utama */
-.main-content {
-    flex: 1;
-    padding: 30px;
-    background-color: #fff;
+.main-content header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
 }
+
 
 header h1 {
     font-size: 26px;
@@ -131,6 +133,13 @@ a:hover {
     font-style: italic;
 }
 
+.badge-warning {
+    background-color: #ffc107;
+    color: #212529;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
 .btn-success {
     background-color: #28a745;
     color: white;
@@ -142,14 +151,17 @@ a:hover {
     background-color: #218838;
 }
 .btn {
-    padding: 5px 10px;
+    padding: 8px 14px;
     margin: 2px;
     border: none;
     border-radius: 5px;
     text-decoration: none;
     font-size: 0.9rem;
+    background-color: #0d6efd;
     color: white;
+    display: inline-block;
 }
+
 
 .btn-danger {
     background-color: #dc3545;

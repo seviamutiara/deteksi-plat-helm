@@ -262,48 +262,6 @@
         </tbody>
     </table>
 </div>
-
-<!-- NOTIFIKASI -->
-<div class="section">
-  <h3>Riwayat Pelanggaran Terbaru</h3>
-<table border="1">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Pelanggaran</th>
-                        <th>Status Baca</th>
-                        <th>Metode</th>
-                        <th>Tanggal Dikirim</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for notif in notifikasi %}
-                    <tr>
-                        <td>{{ notif.notif_id }}</td>
-                        <td>{{ notif.pelanggaran.lokasi }} ({{ notif.pelanggaran.waktu|date:"d M Y H:i" }})</td>
-                        <td>{{ notif.status_baca|yesno:"Sudah,Belum" }}</td>
-                        <td>{{ notif.metode }}</td>
-                        <td>{{ notif.tanggal_kirim|date:"d M Y H:i" }}</td>
-                        <td>
-                            {% if notif.pelanggaran.status == "Ditindak" %}
-                            <form action="{% url 'pengguna_bayar_sanksi' notif.pelanggaran.id_pelanggaran %}" method="post" style="display:inline;">
-                                {% csrf_token %}
-                                <button class="btn-success" type="submit">Bayar & Selesaikan</button>
-                            </form>
-                            {% elif notif.pelanggaran.status == "Selesai" %}
-                            <span class="badge bg-success">Selesai</span>
-                            {% else %}
-                            <span class="badge">Belum Ditindak</span>
-                            {% endif %}
-                        </td>
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <td colspan="6" style="text-align: center;">Belum ada notifikasi</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
 </body>
+{% include "partials/footer.html" %}
 </html>
