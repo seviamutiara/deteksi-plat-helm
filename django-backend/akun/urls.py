@@ -34,7 +34,7 @@ urlpatterns = [
 
 
     # Notifikasi
-    path('notifikasi/<int:id_pelanggaran>/kirim/', views.kirim_notifikasi, name='kirim_notifikasi'),
+    path('notifikasi/<int:pelanggaran_id>/kirim/', views.kirim_notifikasi, name='kirim_notifikasi'),
     path('notifikasi/saya/', views.notifikasi_user_view, name='notifikasi'),
     path('pelanggaran/<int:id_pelanggaran>/selesai/', views.tandai_selesai, name='tandai_selesai'),
     path('pelanggaran/<int:id_pelanggaran>/bayar/', views.pengguna_bayar_sanksi, name='pengguna_bayar_sanksi'),
@@ -43,6 +43,11 @@ urlpatterns = [
     # API
     path('api/violations/', views.api_tambah_pelanggaran, name='api_tambah_pelanggaran'),
     path('api/plat-terdaftar/', daftar_plat_terdaftar, name='daftar_plat_terdaftar'),
+
+    path('kendaraan/edit/<int:id>/', halaman_views.kendaraan_edit, name='kendaraan_edit'),
+    path('kendaraan/hapus/<int:id>/', halaman_views.kendaraan_delete, name='kendaraan_delete'),
+
+
 ]
 
 from django.conf import settings

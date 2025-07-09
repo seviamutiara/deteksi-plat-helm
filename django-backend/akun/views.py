@@ -9,7 +9,7 @@ from django.contrib.auth import views as auth_views
 from django.core.mail import send_mail
 from django.http import JsonResponse
 from .models import Pelanggaran, Notifikasi, Kendaraan, User
-from .forms import CustomUserCreationForm, CustomUserChangeForm
+from .forms import CustomUserCreationForm, CustomUserChangeForm, KendaraanForm
 
 # Role check decorator
 def admin_required(view_func):
@@ -242,14 +242,32 @@ def riwayat_pelanggaran_user(request):
 def pengguna_bayar_sanksi(request, pelanggaran_id):
     pelanggaran = get_object_or_404(Pelanggaran, id_pelanggaran=pelanggaran_id)
 
-    # Validasi bahwa pelanggaran ini milik user
     kendaraan_user = Kendaraan.objects.filter(user=request.user)
     if not kendaraan_user.filter(plat_nomor=pelanggaran.plate_number).exists():
         raise PermissionDenied("Pelanggaran ini bukan milik Anda.")
 
-    # Update status
     pelanggaran.status = "Selesai"
     pelanggaran.save()
 
     messages.success(request, "Terima kasih, pelanggaran telah diselesaikan.")
-    return redirect('notifikasi')  # arahkan ke riwayat atau notifikasi user
+    return redirect('notifikasi')
+
+# === TAMBAHAN ===
+@admin_required
+def kendaraan_edit(request, id):
+    kendaraan = get_object_or_404(Kendaraan, id_kendaraan=id)
+    form = KendaraanForm(request.POST or None, request.FILES or None, instance=kendaraan)
+    if request.method == 'POST' and form.is_valid():
+        form.save()
+        messages.success(request, 'Data kendaraan berhasil diperbarui.')
+        return redirect('kendaraan_list')
+    return render(request, 'halaman/kendaraan_form.html', {'form': form, 'title': 'Edit Data Kendaraan'})
+
+@admin_required
+def kendaraan_delete(request, id):
+    kendaraan = get_object_or_404(Kendaraan, id_kendaraan=id)
+    if request.method == 'POST':
+        kendaraan.delete()
+        messages.success(request, 'Data kendaraan berhasil dihapus.')
+        return redirect('kendaraan_list')
+    return render(request, 'halaman/kendaraan_confirm_delete.html', {'kendaraan': kendaraan})

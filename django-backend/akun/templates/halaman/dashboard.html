@@ -7,35 +7,148 @@
     <title>Dashboard - Kamera Pintar</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <style>
-        .summary {
-            margin-top: 20px;
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f4f6f8;
+            color: #333;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 220px;
+            background-color: #0d0c2d;
+            color: white;
+            padding: 20px;
+        }
+
+        .sidebar h2 {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+        }
+
+        .sidebar nav a {
+            display: block;
             padding: 10px;
-            background-color: #f4f4f4;
-            border: 1px solid #ddd;
+            color: #ccc;
+            text-decoration: none;
+            margin-bottom: 10px;
             border-radius: 5px;
         }
-        .summary h3 {
-            margin: 0;
-            font-size: 1.2em;
+
+        .sidebar nav a:hover {
+            background-color: #2e2c6a;
+            color: white;
         }
+
+        .main-content {
+            flex: 1;
+            padding: 30px;
+        }
+
+        .main-content h1 {
+            margin-top: 0;
+            font-size: 2em;
+        }
+
+        .stats-container {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+
+        .card {
+            flex: 1;
+            min-width: 180px;
+            padding: 15px;
+            color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .card.red { background-color: #dc3545; }
+        .card.green { background-color: #28a745; }
+        .card.blue { background-color: #007bff; }
+
+        .card p {
+            margin: 0;
+            font-weight: bold;
+        }
+
+        .card span {
+            font-size: 1.6em;
+        }
+
+        .table-section {
+            margin-top: 40px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        table th, table td {
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        table th {
+            background-color: #f8f9fa;
+        }
+
+        img {
+            border-radius: 4px;
+        }
+
         .btn-primary, .btn-success, .btn-danger {
-            padding: 5px 10px;
+            padding: 6px 12px;
             border: none;
-            border-radius: 3px;
+            border-radius: 4px;
+            font-size: 0.9em;
             color: white;
             cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin: 2px 0;
         }
+
         .btn-primary { background-color: #007bff; }
         .btn-success { background-color: #28a745; }
         .btn-danger { background-color: #dc3545; }
+
         .badge-success {
             background-color: #28a745;
             color: white;
             padding: 4px 8px;
             border-radius: 4px;
+            font-size: 0.85em;
         }
 
-        /* Modal Gambar */
+        .badge-warning {
+            background-color: #ffc107;
+            color: #212529;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.85em;
+        }
+
         .modal {
             display: none;
             position: fixed;
@@ -48,6 +161,7 @@
             overflow: auto;
             background-color: rgba(0,0,0,0.8);
         }
+
         .modal-content {
             display: block;
             margin: auto;
@@ -55,6 +169,7 @@
             max-height: 80%;
             border-radius: 8px;
         }
+
         .close {
             position: absolute;
             top: 30px;
@@ -64,137 +179,140 @@
             font-weight: bold;
             cursor: pointer;
         }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+            }
+
+            .stats-container {
+                flex-direction: column;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <aside class="sidebar">
-            <h2>Kamera Pintar</h2>
-            <nav>
-                <a href="{% url 'dashboard' %}">Dashboard</a>
-                <a href="{% url 'history' %}">Histori Pelanggaran</a>
-                <a href="{% url 'kendaraan_list' %}">Data Kendaraan</a>
-                <a href="{% url 'user_list' %}">Kelola Akun</a>
-                <a href="{% url 'logout' %}">Logout</a>
-            </nav>
-        </aside>
+<div class="container">
+    <aside class="sidebar">
+        <h2>Kamera Pintar</h2>
+        <nav>
+            <a href="{% url 'dashboard' %}">Dashboard</a>
+            <a href="{% url 'history' %}">Histori Pelanggaran</a>
+            <a href="{% url 'kendaraan_list' %}">Data Kendaraan</a>
+            <a href="{% url 'user_list' %}">Kelola Akun</a>
+            <a href="{% url 'logout' %}">Logout</a>
+        </nav>
+    </aside>
 
-        <main class="main-content">
-            <header>
-                <h1>Kamera Pintar</h1>
-                <div class="cards">
-                    <div class="card red">
-                        <p>Total pelanggaran hari ini</p>
-                        <span class="icon">{{ total_today }}</span>
-                    </div>
-                    <div class="card red">
-                        <p>Pelanggaran ditindak</p>
-                        <span class="icon">{{ ditindak }}</span>
-                    </div>
-                    <div class="card green">
-                        <p>Pelanggaran Selesai</p>
-                        <span class="icon">{{ selesai }}</span>
-                    </div>
-                    <div class="card blue">
-                        <p>Lokasi Kamera aktif</p>
-                        <span class="icon">{{ kamera_aktif }}</span>
-                    </div>
-                </div>
+    <main class="main-content">
+        <h1>Selamat datang, {{ user.username }}</h1>
 
-                <div class="summary">
-                    <h3>Total Denda Terkumpul: Rp {{ total_denda|floatformat:0|intcomma }}</h3>
-                </div>
-            </header>
+        <div class="stats-container">
+            <div class="card red">
+                <p>Total pelanggaran hari ini</p>
+                <span>{{ total_today }}</span>
+            </div>
+            <div class="card red">
+                <p>Pelanggaran ditindak</p>
+                <span>{{ ditindak }}</span>
+            </div>
+            <div class="card green">
+                <p>Pelanggaran Selesai</p>
+                <span>{{ selesai }}</span>
+            </div>
+            <div class="card blue">
+                <p>Lokasi Kamera aktif</p>
+                <span>{{ kamera_aktif }}</span>
+            </div>
+        </div>
 
-            <section class="table-section">
-                <h2>Data pelanggaran</h2>
-                <table>
-                    <thead>
-           <tr>
-                     <th>ID</th>
-                     <th>Gambar</th>
-                     <th>Waktu</th>
-                     <th>Lokasi</th>
-                     <th>Plat nomor</th>
-                     <th>Status</th>
-                     <th>Bukti Pembayaran</th>
-                     <th>Aksi</th>
-            </tr>
-                    </thead>
+        <section class="table-section">
+            <h2>Data Pelanggaran</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Gambar</th>
+                        <th>Waktu</th>
+                        <th>Lokasi</th>
+                        <th>Plat Nomor</th>
+                        <th>Status</th>
+                        <th>Bukti Pembayaran</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
                 <tbody>
                     {% for pelanggaran in pelanggarans %}
-            <tr>
-                 <td>{{ pelanggaran.id_pelanggaran }}</td>
-               <td>
-                  <img src="data:image/jpeg;base64,{{ pelanggaran.image_base64 }}"
-                  width="200" alt="Bukti Pelanggaran"
-                  onclick="showImageModal(this.src)"
-                  style="cursor: zoom-in; border-radius: 4px;">
-                </td>
-                  <td>{{ pelanggaran.waktu|date:"d M Y H:i" }}</td>
-                  <td>{{ pelanggaran.lokasi }}</td>
-                  <td>{{ pelanggaran.plate_number }}</td>
-                  <td>{{ pelanggaran.status }}</td>
-     
-                <td>
-                     {% if pelanggaran.bukti_pembayaran %}
-                      <img src="{{ pelanggaran.bukti_pembayaran.url }}"
-                      width="100"
-                      style="border-radius: 4px; cursor: zoom-in;"
-                      onclick="showImageModal(this.src)"
-                      alt="Bukti Pembayaran">
-            {% else %}
-                  <span style="color: gray;">Belum diunggah</span>
-            {% endif %}
-               </td>
-
-            <td>
-              {% if pelanggaran.status == "Belum Ditindak" %}
-                <a href="{% url 'kirim_notifikasi' pelanggaran.id_pelanggaran %}" class="btn btn-primary">Kirim Notifikasi</a>
-              {% elif pelanggaran.status == "Ditindak" %}
-                {% if pelanggaran.bukti_pembayaran %}
-                    <a href="{% url 'verifikasi_pembayaran' pelanggaran.id_pelanggaran %}" class="btn btn-success">Verifikasi Pembayaran</a>
-                {% else %}
-                    <span class="badge badge-warning">Menunggu Bukti</span>
-                {% endif %}
-            {% else %}
-                <span class="badge badge-success">Selesai</span>
-            {% endif %}
-
-            <a href="{% url 'hapus_pelanggaran' pelanggaran.id_pelanggaran %}"
-               class="btn btn-danger"
-               onclick="return confirm('Yakin ingin menghapus data ini?')">
-               Hapus
-            </a>
-        </td>
-    </tr>
-    {% empty %}
-    <tr><td colspan="8">Tidak ada data.</td></tr>
-    {% endfor %}
+                    <tr>
+                        <td>{{ pelanggaran.id_pelanggaran }}</td>
+                        <td>
+                            <img src="data:image/jpeg;base64,{{ pelanggaran.image_base64 }}" width="100" onclick="showImageModal(this.src)" style="cursor: zoom-in;">
+                        </td>
+                        <td>{{ pelanggaran.waktu|date:"d M Y H:i" }}</td>
+                        <td>{{ pelanggaran.lokasi }}</td>
+                        <td>{{ pelanggaran.plate_number }}</td>
+                        <td>{{ pelanggaran.status }}</td>
+                        <td>
+                            {% if pelanggaran.bukti_pembayaran %}
+                                <img src="{{ pelanggaran.bukti_pembayaran.url }}" width="80" onclick="showImageModal(this.src)" style="cursor: zoom-in;">
+                            {% else %}
+                                <span style="color: gray;">Belum diunggah</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if pelanggaran.status == "Belum Ditindak" %}
+                                <a href="{% url 'kirim_notifikasi' pelanggaran.id_pelanggaran %}" class="btn-primary">Kirim Notifikasi</a>
+                            {% elif pelanggaran.status == "Ditindak" %}
+                                {% if pelanggaran.bukti_pembayaran %}
+                                    <a href="{% url 'verifikasi_pembayaran' pelanggaran.id_pelanggaran %}" class="btn-success">Verifikasi Pembayaran</a>
+                                {% else %}
+                                    <span class="badge-warning">Menunggu Bukti</span>
+                                {% endif %}
+                            {% else %}
+                                <span class="badge-success">Selesai</span>
+                            {% endif %}
+                            <br>
+                            <a href="{% url 'hapus_pelanggaran' pelanggaran.id_pelanggaran %}" class="btn-danger" onclick="return confirm('Yakin ingin menghapus data ini?')">Hapus</a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="8">Tidak ada data.</td></tr>
+                    {% endfor %}
                 </tbody>
-                </table>
-            </section>
-        </main>
-    </div>
+            </table>
 
-    <!-- Modal Gambar -->
-    <div id="imageModal" class="modal">
-        <span class="close" onclick="closeModal()">&times;</span>
-        <img class="modal-content" id="modalImage">
-    </div>
+            {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li class="{{ message.tags }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </section>
+    </main>
+</div>
 
-    <script>
-        function showImageModal(src) {
-            var modal = document.getElementById("imageModal");
-            var modalImg = document.getElementById("modalImage");
-            modal.style.display = "block";
-            modalImg.src = src;
-        }
+<!-- Modal Gambar -->
+<div id="imageModal" class="modal">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <img class="modal-content" id="modalImage">
+</div>
 
-        function closeModal() {
-            document.getElementById("imageModal").style.display = "none";
-        }
-    </script>
-</body>
+<script>
+    function showImageModal(src) {
+        document.getElementById("imageModal").style.display = "block";
+        document.getElementById("modalImage").src = src;
+    }
+
+    function closeModal() {
+        document.getElementById("imageModal").style.display = "none";
+    }
+</script>
+
 {% include "partials/footer.html" %}
+</body>
 </html>
