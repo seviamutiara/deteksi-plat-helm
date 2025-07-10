@@ -113,7 +113,7 @@
             cursor: pointer;
         }
 
-        /* Modal styles for zoom */
+        /* Modal styles */
         .modal {
             display: none;
             position: fixed;
@@ -123,13 +123,12 @@
             top: 0;
             width: 100%;
             height: 100%;
-            overflow: auto;
-            background-color: rgba(0,0,0,0.8);
+            background-color: rgba(0, 0, 0, 0.9);
         }
 
         .modal-content {
-            margin: auto;
             display: block;
+            margin: auto;
             max-width: 90%;
             max-height: 80vh;
             border-radius: 10px;
@@ -149,8 +148,6 @@
         .close:hover,
         .close:focus {
             color: #ccc;
-            text-decoration: none;
-            cursor: pointer;
         }
 
         @media (max-width: 768px) {
@@ -189,7 +186,6 @@
         <h1>Histori Pelanggaran Anda</h1>
     </div>
 
-    <!-- Konten -->
     <div class="container">
         <table>
             <thead>
@@ -219,7 +215,7 @@
                     </td>
                     <td>
                         {% if p.bukti_gambar %}
-                            <img src="{{ p.bukti_gambar.url }}" width="80" alt="Bukti">
+                            <img src="{{ p.bukti_gambar.url }}" width="80" class="thumbnail" alt="Bukti">
                         {% else %}
                             Tidak ada gambar
                         {% endif %}
@@ -236,35 +232,34 @@
 
     <!-- Modal Zoom -->
     <div id="imageModal" class="modal">
-        <span class="close">&times;</span>
+        <span class="close" onclick="closeModal()">&times;</span>
         <img class="modal-content" id="imgZoom">
     </div>
 
-    <!-- Script Zoom -->
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
+        function closeModal() {
+            document.getElementById("imageModal").style.display = "none";
+        }
+
+        window.addEventListener("DOMContentLoaded", function () {
             const modal = document.getElementById("imageModal");
             const modalImg = document.getElementById("imgZoom");
-            const closeBtn = document.querySelector(".close");
 
-            document.querySelectorAll("img").forEach(img => {
+            document.querySelectorAll(".thumbnail").forEach(img => {
                 img.addEventListener("click", function () {
                     modal.style.display = "block";
                     modalImg.src = this.src;
                 });
             });
 
-            closeBtn.onclick = function () {
-                modal.style.display = "none";
-            }
-
             window.onclick = function (event) {
                 if (event.target == modal) {
                     modal.style.display = "none";
                 }
-            }
+            };
         });
     </script>
+
+    {% include "partials/footer.html" %}
 </body>
-{% include "partials/footer.html" %}
 </html>

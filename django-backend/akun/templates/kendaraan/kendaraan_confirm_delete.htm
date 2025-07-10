@@ -3,7 +3,7 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>{{ title }}</title>
+    <title>Konfirmasi Hapus Kendaraan</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
@@ -20,12 +20,13 @@
         </aside>
 
         <main class="main-content">
-            <h1>{{ title }}</h1>
-            <form method="post" enctype="multipart/form-data">
+            <h1>Hapus Kendaraan</h1>
+            <p>Apakah Anda yakin ingin menghapus kendaraan dengan plat nomor <strong>{{ kendaraan.plat_nomor }}</strong>?</p>
+
+            <form method="post">
                 {% csrf_token %}
-                {{ form.as_p }}
-                <button type="submit" class="btn">Simpan</button>
-                <a href="{% url 'kendaraan_list' %}">Kembali</a>
+                <button type="submit" class="btn btn-danger">Ya, Hapus</button>
+                <a href="{% url 'kendaraan_list' %}" class="btn">Batal</a>
             </form>
         </main>
     </div>

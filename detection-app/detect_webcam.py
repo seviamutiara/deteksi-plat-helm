@@ -11,8 +11,8 @@ from fast_plate_ocr import LicensePlateRecognizer
 MODEL_PATH = "yolov8_helmet_license_plate_v11_final.pt"
 CONFIDENCE_THRESHOLD = 0.5
 CAMERA_INDEX = 0
-API_ENDPOINT_URL = "http://l10.10.6.125:9000/api/violations/"
-PLATE_VALIDATION_API_URL = "http://10.10.6.125:9000/api/plat-terdaftar/"
+API_ENDPOINT_URL = "http://10.10.0.127:9000/api/violations/"
+PLATE_VALIDATION_API_URL = "http://10.10.0.127:9000/api/plat-terdaftar/"
 
 # --- Inisialisasi OCR ---
 ocr_model = LicensePlateRecognizer('cct-xs-v1-global-model')

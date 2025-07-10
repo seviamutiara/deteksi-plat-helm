@@ -5,6 +5,143 @@
     <meta charset="UTF-8">
     <title>Histori Pelanggaran - Kamera Pintar</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f4f6f8;
+            color: #333;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 220px;
+            background-color: #0d0c2d;
+            color: white;
+            padding: 20px;
+        }
+
+        .sidebar h2 {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+        }
+
+        .sidebar nav a {
+            display: block;
+            padding: 10px;
+            color: #ccc;
+            text-decoration: none;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+
+        .sidebar nav a:hover {
+            background-color: #2e2c6a;
+            color: white;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 40px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            margin: 30px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            margin-top: 0;
+        }
+
+        .btn-download {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-download:hover {
+            background-color: #45a049;
+        }
+
+        .data-section {
+            margin-top: 20px;
+        }
+
+        table.pelanggaran-table {
+            width: 100%;
+            border-collapse: collapse;
+            border-radius: 6px;
+            overflow: hidden;
+            background-color: white;
+        }
+
+        table.pelanggaran-table th,
+        table.pelanggaran-table td {
+            padding: 12px 14px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        table.pelanggaran-table th {
+            background-color: #f8f9fa;
+        }
+
+        table.pelanggaran-table img {
+            border-radius: 4px;
+            cursor: zoom-in;
+        }
+
+        /* Modal Zoom */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.8);
+        }
+
+        .modal-content {
+            display: block;
+            margin: auto;
+            max-width: 90%;
+            max-height: 80%;
+            border-radius: 8px;
+        }
+
+        .close {
+            position: absolute;
+            top: 30px;
+            right: 50px;
+            color: #fff;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 20px;
+                margin: 20px;
+            }
+
+            table.pelanggaran-table {
+                font-size: 14px;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -24,16 +161,8 @@
                 <h1>Histori Pelanggaran</h1>
             </header>
 
-            <!-- Tombol Download PDF -->
             <div style="margin-bottom: 20px;">
-                <a href="{% url 'download_history_pdf' %}" class="btn-download" style="
-                    display: inline-block;
-                    padding: 10px 20px;
-                    background-color: #4CAF50;
-                    color: white;
-                    text-decoration: none;
-                    border-radius: 5px;
-                ">Download PDF</a>
+                <a href="{% url 'download_history_pdf' %}" class="btn-download">Download PDF</a>
             </div>
 
             <section class="data-section">
@@ -58,16 +187,43 @@
                             <td>{{ pelanggaran.waktu|date:"d M Y H:i" }}</td>
                             <td>{{ pelanggaran.lokasi }}</td>
                             <td>{{ pelanggaran.status }}</td>
-                            <td><img src="{{ pelanggaran.bukti_gambar.url }}" width="80" alt="Bukti"></td>
+                            <td>
+                                <img src="{{ pelanggaran.bukti_gambar.url }}" width="80" alt="Bukti" onclick="showImageModal(this.src)">
+                            </td>
                         </tr>
                         {% empty %}
-                        <tr><td colspan="6">Tidak ada data pelanggaran.</td></tr>
+                        <tr><td colspan="7">Tidak ada data pelanggaran.</td></tr>
                         {% endfor %}
                     </tbody>
                 </table>
             </section>
         </main>
     </div>
+
+    <!-- Modal Gambar -->
+    <div id="imageModal" class="modal">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <img class="modal-content" id="modalImage">
+    </div>
+
+    <script>
+        function showImageModal(src) {
+            document.getElementById("imageModal").style.display = "block";
+            document.getElementById("modalImage").src = src;
+        }
+
+        function closeModal() {
+            document.getElementById("imageModal").style.display = "none";
+        }
+
+        // Tutup modal saat klik di luar gambar
+        window.onclick = function(event) {
+            const modal = document.getElementById("imageModal");
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
 </body>
 {% include "partials/footer.html" %}
 </html>
