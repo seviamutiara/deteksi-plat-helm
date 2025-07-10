@@ -5,66 +5,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Dashboard - Kamera Pintar</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    <style>
-        .summary {
-            margin-top: 20px;
-            padding: 10px;
-            background-color: #f4f4f4;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-        .summary h3 {
-            margin: 0;
-            font-size: 1.2em;
-        }
-        .btn-primary, .btn-success, .btn-danger {
-            padding: 5px 10px;
-            border: none;
-            border-radius: 3px;
-            color: white;
-            cursor: pointer;
-        }
-        .btn-primary { background-color: #007bff; }
-        .btn-success { background-color: #28a745; }
-        .btn-danger { background-color: #dc3545; }
-        .badge-success {
-            background-color: #28a745;
-            color: white;
-            padding: 4px 8px;
-            border-radius: 4px;
-        }
-
-        /* Modal Gambar */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 9999;
-            padding-top: 60px;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0,0,0,0.8);
-        }
-        .modal-content {
-            display: block;
-            margin: auto;
-            max-width: 90%;
-            max-height: 80%;
-            border-radius: 8px;
-        }
-        .close {
-            position: absolute;
-            top: 30px;
-            right: 50px;
-            color: #fff;
-            font-size: 40px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-    </style>
 </head>
 <body>
     <div class="container">
@@ -107,71 +49,65 @@
             </header>
 
             <section class="table-section">
-                <h2>Data pelanggaran</h2>
+                <h2>Data Pelanggaran</h2>
                 <table>
                     <thead>
-           <tr>
-                     <th>ID</th>
-                     <th>Gambar</th>
-                     <th>Waktu</th>
-                     <th>Lokasi</th>
-                     <th>Plat nomor</th>
-                     <th>Status</th>
-                     <th>Bukti Pembayaran</th>
-                     <th>Aksi</th>
-            </tr>
+                        <tr>
+                            <th>ID</th>
+                            <th>Gambar</th>
+                            <th>Waktu</th>
+                            <th>Lokasi</th>
+                            <th>Plat Nomor</th>
+                            <th>Status</th>
+                            <th>Bukti Pembayaran</th>
+                            <th>Aksi</th>
+                        </tr>
                     </thead>
-                <tbody>
-                    {% for pelanggaran in pelanggarans %}
-            <tr>
-                 <td>{{ pelanggaran.id_pelanggaran }}</td>
-               <td>
-                  <img src="data:image/jpeg;base64,{{ pelanggaran.image_base64 }}"
-                  width="200" alt="Bukti Pelanggaran"
-                  onclick="showImageModal(this.src)"
-                  style="cursor: zoom-in; border-radius: 4px;">
-                </td>
-                  <td>{{ pelanggaran.waktu|date:"d M Y H:i" }}</td>
-                  <td>{{ pelanggaran.lokasi }}</td>
-                  <td>{{ pelanggaran.plate_number }}</td>
-                  <td>{{ pelanggaran.status }}</td>
-     
-                <td>
-                     {% if pelanggaran.bukti_pembayaran %}
-                      <img src="{{ pelanggaran.bukti_pembayaran.url }}"
-                      width="100"
-                      style="border-radius: 4px; cursor: zoom-in;"
-                      onclick="showImageModal(this.src)"
-                      alt="Bukti Pembayaran">
-            {% else %}
-                  <span style="color: gray;">Belum diunggah</span>
-            {% endif %}
-               </td>
-
-            <td>
-              {% if pelanggaran.status == "Belum Ditindak" %}
-                <a href="{% url 'kirim_notifikasi' pelanggaran.id_pelanggaran %}" class="btn btn-primary">Kirim Notifikasi</a>
-              {% elif pelanggaran.status == "Ditindak" %}
-                {% if pelanggaran.bukti_pembayaran %}
-                    <a href="{% url 'verifikasi_pembayaran' pelanggaran.id_pelanggaran %}" class="btn btn-success">Verifikasi Pembayaran</a>
-                {% else %}
-                    <span class="badge badge-warning">Menunggu Bukti</span>
-                {% endif %}
-            {% else %}
-                <span class="badge badge-success">Selesai</span>
-            {% endif %}
-
-            <a href="{% url 'hapus_pelanggaran' pelanggaran.id_pelanggaran %}"
-               class="btn btn-danger"
-               onclick="return confirm('Yakin ingin menghapus data ini?')">
-               Hapus
-            </a>
-        </td>
-    </tr>
-    {% empty %}
-    <tr><td colspan="8">Tidak ada data.</td></tr>
-    {% endfor %}
-                </tbody>
+                    <tbody>
+                        {% for pelanggaran in pelanggarans %}
+                        <tr>
+                            <td data-label="ID">{{ pelanggaran.id_pelanggaran }}</td>
+                            <td data-label="Gambar">
+                                <img src="data:image/jpeg;base64,{{ pelanggaran.image_base64 }}"
+                                     width="200" alt="Bukti Pelanggaran"
+                                     onclick="showImageModal(this.src)"
+                                     style="cursor: zoom-in;">
+                            </td>
+                            <td data-label="Waktu">{{ pelanggaran.waktu|date:"d M Y H:i" }}</td>
+                            <td data-label="Lokasi">{{ pelanggaran.lokasi }}</td>
+                            <td data-label="Plat Nomor">{{ pelanggaran.plate_number }}</td>
+                            <td data-label="Status">{{ pelanggaran.status }}</td>
+                            <td data-label="Bukti Pembayaran">
+                                {% if pelanggaran.bukti_pembayaran %}
+                                    <img src="{{ pelanggaran.bukti_pembayaran.url }}"
+                                         width="100"
+                                         onclick="showImageModal(this.src)"
+                                         alt="Bukti Pembayaran">
+                                {% else %}
+                                    <span style="color: gray;">Belum diunggah</span>
+                                {% endif %}
+                            </td>
+                            <td data-label="Aksi">
+                                {% if pelanggaran.status == "Belum Ditindak" %}
+                                    <a href="{% url 'kirim_notifikasi' pelanggaran.id_pelanggaran %}" class="btn btn-primary">Kirim Notifikasi</a>
+                                {% elif pelanggaran.status == "Ditindak" %}
+                                    {% if pelanggaran.bukti_pembayaran %}
+                                        <a href="{% url 'verifikasi_pembayaran' pelanggaran.id_pelanggaran %}" class="btn btn-success">Verifikasi Pembayaran</a>
+                                    {% else %}
+                                        <span class="badge badge-warning">Menunggu Bukti</span>
+                                    {% endif %}
+                                {% else %}
+                                    <span class="badge badge-success">Selesai</span>
+                                {% endif %}
+                                <a href="{% url 'hapus_pelanggaran' pelanggaran.id_pelanggaran %}"
+                                   class="btn btn-danger"
+                                   onclick="return confirm('Yakin ingin menghapus data ini?')">Hapus</a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr><td colspan="8">Tidak ada data.</td></tr>
+                        {% endfor %}
+                    </tbody>
                 </table>
             </section>
         </main>
@@ -183,18 +119,7 @@
         <img class="modal-content" id="modalImage">
     </div>
 
-    <script>
-        function showImageModal(src) {
-            var modal = document.getElementById("imageModal");
-            var modalImg = document.getElementById("modalImage");
-            modal.style.display = "block";
-            modalImg.src = src;
-        }
-
-        function closeModal() {
-            document.getElementById("imageModal").style.display = "none";
-        }
-    </script>
+    <script src="{% static 'js/dashboard.js' %}"></script>
+    {% include "partials/footer.html" %}
 </body>
-{% include "partials/footer.html" %}
 </html>
