@@ -44,7 +44,17 @@
                 </div>
 
                 <div class="summary">
-                    <h3>Total Denda Terkumpul: Rp {{ total_denda|floatformat:0|intcomma }}</h3>
+                    <h3>Total Denda Per Pengguna</h3>
+                    <ul>
+                        {% for user, total in denda_per_user.items %}
+                            <li>
+                                {{ user.get_full_name|default:user.username }}:
+                                <strong>Rp {{ total|floatformat:0|intcomma }}</strong>
+                            </li>
+                        {% empty %}
+                            <li>Tidak ada data denda saat ini.</li>
+                        {% endfor %}
+                    </ul>
                 </div>
             </header>
 
@@ -75,29 +85,64 @@
                             </td>
                             <td data-label="Waktu">{{ pelanggaran.waktu|date:"d M Y H:i" }}</td>
                             <td data-label="Lokasi">{{ pelanggaran.lokasi }}</td>
-                            <td data-label="Plat Nomor">{{ pelanggaran.plat_nomor }}</td>
-                            <td data-label="Status">{{ pelanggaran.status }}</td>
+                            <td data-label="Plat Nomor">
+                                {% if pelanggaran.plat_nomor %}
+                                    {{ pelanggaran.plat_nomor }}
+                                {% else %}
+                                    <span style="color: red; font-weight: bold;">Tidak Terdeteksi</span>
+                                {% endif %}
+                            </td>
+                            <td data-label="Status">
+                                {% if pelanggaran.status == "Selesai" %}
+                                    {% if pelanggaran.bukti_pembayaran %}
+                                        <span class="badge badge-success">Selesai</span>
+                                    {% else %}
+                                        <span class="badge badge-danger">Bukti Hilang</span>
+                                    {% endif %}
+                                {% elif pelanggaran.status == "Ditindak" %}
+                                    {% if pelanggaran.bukti_pembayaran %}
+                                        <span class="badge badge-info">Menunggu Verifikasi</span>
+                                    {% else %}
+                                        <span class="badge badge-warning">Menunggu Bukti</span>
+                                    {% endif %}
+                                {% else %}
+                                    <span class="badge badge-secondary">Belum Ditindak</span>
+                                {% endif %}
+                            </td>
                             <td data-label="Bukti Pembayaran">
                                 {% if pelanggaran.bukti_pembayaran %}
                                     <img src="{{ pelanggaran.bukti_pembayaran.url }}"
                                          width="100"
                                          onclick="showImageModal(this.src)"
-                                         alt="Bukti Pembayaran">
+                                         alt="Bukti Pembayaran"
+                                         style="cursor: zoom-in;">
                                 {% else %}
                                     <span style="color: gray;">Belum diunggah</span>
                                 {% endif %}
                             </td>
                             <td data-label="Aksi">
                                 {% if pelanggaran.status == "Belum Ditindak" %}
-                                    <a href="{% url 'kirim_notifikasi' pelanggaran.id_pelanggaran %}" class="btn btn-primary">Kirim Notifikasi</a>
+                                    {% if pelanggaran.plat_nomor %}
+                                        <a href="{% url 'kirim_notifikasi' pelanggaran.id_pelanggaran %}" class="btn btn-primary">
+                                            Kirim Notifikasi
+                                        </a>
+                                    {% else %}
+                                        <span class="badge badge-danger" style="display: inline-block; margin-bottom: 5px;">
+                                            Plat Tidak Dikenali
+                                        </span>
+                                    {% endif %}
                                 {% elif pelanggaran.status == "Ditindak" %}
                                     {% if pelanggaran.bukti_pembayaran %}
-                                        <a href="{% url 'verifikasi_pembayaran' pelanggaran.id_pelanggaran %}" class="btn btn-success">Verifikasi Pembayaran</a>
+                                        <a href="{% url 'verifikasi_pembayaran' pelanggaran.id_pelanggaran %}" class="btn btn-success">Verifikasi</a>
                                     {% else %}
                                         <span class="badge badge-warning">Menunggu Bukti</span>
                                     {% endif %}
-                                {% else %}
-                                    <span class="badge badge-success">Selesai</span>
+                                {% elif pelanggaran.status == "Selesai" %}
+                                    {% if pelanggaran.bukti_pembayaran %}
+                                        <span class="badge badge-success">Selesai</span>
+                                    {% else %}
+                                        <span class="badge badge-danger">Tanpa Bukti</span>
+                                    {% endif %}
                                 {% endif %}
                                 <a href="{% url 'hapus_pelanggaran' pelanggaran.id_pelanggaran %}"
                                    class="btn btn-danger"

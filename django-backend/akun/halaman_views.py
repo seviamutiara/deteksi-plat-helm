@@ -35,7 +35,10 @@ def kendaraan_create(request):
             return redirect('kendaraan_list')
     else:
         form = KendaraanForm()
-    return render(request, 'kendaraan/kendaraan_form.html', {'form': form, 'title': 'Tambah Data Kendaraan'})
+    return render(request, 'kendaraan/kendaraan_form.html', {
+        'form': form,
+        'title': 'Tambah Data Kendaraan'
+    })
 
 @admin_required
 def kendaraan_edit(request, id):
