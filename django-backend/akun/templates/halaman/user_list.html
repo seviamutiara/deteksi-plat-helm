@@ -3,8 +3,126 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Manajemen Akun</title>
+    <title>Kelola Pengguna</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f4f6f8;
+            color: #333;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 220px;
+            background-color: #0d0c2d;
+            color: white;
+            padding: 20px;
+        }
+
+        .sidebar h2 {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+        }
+
+        .sidebar nav a {
+            display: block;
+            padding: 10px;
+            color: #ccc;
+            text-decoration: none;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+
+        .sidebar nav a:hover {
+            background-color: #2e2c6a;
+            color: white;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 40px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            margin: 30px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            background-color: #0d6efd;
+            color: white;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #0b5ed7;
+        }
+
+        .table-section h2 {
+            margin-bottom: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        table th, table td {
+            padding: 12px 14px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        table th {
+            background-color: #f8f9fa;
+        }
+
+        a {
+            color: #0d6efd;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 20px;
+                margin: 20px;
+            }
+
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            table {
+                font-size: 14px;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -14,18 +132,18 @@
                 <a href="{% url 'dashboard' %}">Dashboard</a>
                 <a href="{% url 'history' %}">Histori Pelanggaran</a>
                 <a href="{% url 'kendaraan_list' %}">Data Kendaraan</a>
+                <a href="{% url 'user_list' %}">Kelola Akun</a>
                 <a href="{% url 'logout' %}">Logout</a>
             </nav>
         </aside>
 
         <main class="main-content">
             <header>
-                <h1>Manajemen Akun</h1>
+                <h1>Kelola Pengguna</h1>
                 <a href="{% url 'user_create' %}" class="btn">+ Tambah Akun</a>
             </header>
 
             <section class="table-section">
-                <h2>Daftar Akun Pengguna</h2>
                 <table>
                     <thead>
                         <tr>

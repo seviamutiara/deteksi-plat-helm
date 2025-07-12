@@ -33,7 +33,7 @@ urlpatterns = [
     path('dashboard/pelanggaran/<int:id_pelanggaran>/verifikasi/', views.verifikasi_pembayaran, name='verifikasi_pembayaran'),
 
     # Notifikasi
-    path('notifikasi/<int:id_pelanggaran>/kirim/', views.kirim_notifikasi, name='kirim_notifikasi'),
+    path('notifikasi/<int:pelanggaran_id>/kirim/', views.kirim_notifikasi, name='kirim_notifikasi'),
     path('notifikasi/saya/', views.notifikasi_user_view, name='notifikasi'),
     path('pelanggaran/<int:id_pelanggaran>/selesai/', views.tandai_selesai, name='tandai_selesai'),
     path('pelanggaran/<int:id_pelanggaran>/bayar/', views.pengguna_bayar_sanksi, name='pengguna_bayar_sanksi'),
@@ -41,6 +41,11 @@ urlpatterns = [
     # API untuk integrasi deteksi
     path('api/violations/', violations_create, name='api_tambah_pelanggaran'),
     path('api/plat-terdaftar/', daftar_plat_terdaftar, name='daftar_plat_terdaftar'),
+
+    path('kendaraan/edit/<int:id>/', halaman_views.kendaraan_edit, name='kendaraan_edit'),
+    path('kendaraan/hapus/<int:id>/', halaman_views.kendaraan_delete, name='kendaraan_delete'),
+
+
 ]
 
 # Tambahan agar file gambar bisa diakses

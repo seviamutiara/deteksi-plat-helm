@@ -1,0 +1,34 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Konfirmasi Hapus Kendaraan</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <h2>Kamera Pintar</h2>
+            <nav>
+                <a href="{% url 'dashboard' %}">Dashboard</a>
+                <a href="{% url 'history' %}">Histori Pelanggaran</a>
+                <a href="{% url 'kendaraan_list' %}">Data Kendaraan</a>
+                <a href="{% url 'user_list' %}">Kelola Akun</a>
+                <a href="{% url 'logout' %}">Logout</a>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <h1>Hapus Kendaraan</h1>
+            <p>Apakah Anda yakin ingin menghapus kendaraan dengan plat nomor <strong>{{ kendaraan.plat_nomor }}</strong>?</p>
+
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Ya, Hapus</button>
+                <a href="{% url 'kendaraan_list' %}" class="btn">Batal</a>
+            </form>
+        </main>
+    </div>
+</body>
+</html>

@@ -9,7 +9,7 @@ from django.contrib.auth import views as auth_views
 from django.core.mail import send_mail
 from django.http import JsonResponse
 from .models import Pelanggaran, Notifikasi, Kendaraan, User
-from .forms import CustomUserCreationForm, CustomUserChangeForm
+from .forms import CustomUserCreationForm, CustomUserChangeForm, KendaraanForm
 
 # Role check decorator
 def admin_required(view_func):
@@ -114,40 +114,48 @@ def user_delete(request, pk):
         return redirect('user_list')
     return render(request, 'halaman/user_confirm_delete.html', {'user': user})
 
-# Notifikasi
+from django.contrib import messages
+
 @login_required
 def kirim_notifikasi(request, pelanggaran_id):
     pelanggaran = get_object_or_404(Pelanggaran, id_pelanggaran=pelanggaran_id)
     admin = request.user
-    kendaraan = Kendaraan.objects.filter(plat_nomor=pelanggaran.plate_number).first()
+
+    kendaraan = Kendaraan.objects.filter(plat_nomor=pelanggaran.plat_nomor).first()
 
     if kendaraan and kendaraan.user:
         pengguna = kendaraan.user
-        subject = "Notifikasi Pelanggaran Lalu Lintas"
-        message = f"""
-        Halo {pengguna.username},
 
-        Anda telah melakukan pelanggaran lalu lintas:
-        - Lokasi: {pelanggaran.lokasi}
-        - Waktu: {pelanggaran.waktu.strftime('%d-%m-%Y %H:%M')}
-        - Plat Nomor: {pelanggaran.plate_number}
+        if pengguna.email:
+            subject = "Notifikasi Pelanggaran Lalu Lintas"
+            message = f"""
+            Halo {pengguna.username},
 
-        Silakan tindak lanjuti pelanggaran Anda Dengan Membayar Sanksi
+            Anda telah melakukan pelanggaran lalu lintas:
+            - Lokasi: {pelanggaran.lokasi}
+            - Waktu: {pelanggaran.waktu.strftime('%d-%m-%Y %H:%M')}
+            - Plat Nomor: {pelanggaran.plat_nomor}
 
-        Terima kasih,
-        Kamera Pintar
-        """
-        send_mail(subject, message, 'vikraselpian@gmail.com', [pengguna.email])
-        Notifikasi.objects.create(
-            user=pengguna,
-            pelanggaran=pelanggaran,
-            admin=admin,
-            metode='Email',
-            tanggal_kirim=timezone.now(),
-            status_baca=False
-        )
-        pelanggaran.status = "Ditindak"
-        pelanggaran.save()
+            Silakan tindak lanjuti pelanggaran Anda dengan membayar sanksi.
+
+            Terima kasih,
+            Kamera Pintar
+            """
+            send_mail(subject, message, 'vikraselpian@gmail.com', [pengguna.email])
+
+            Notifikasi.objects.create(
+                user=pengguna,
+                pelanggaran=pelanggaran,
+                admin=admin,
+                metode='Email',
+                tanggal_kirim=timezone.now(),
+                status_baca=False
+            )
+            pelanggaran.status = "Ditindak"
+            pelanggaran.save()
+            messages.success(request, f"Notifikasi berhasil dikirim ke {pengguna.username}")
+        else:
+            messages.warning(request, "Pengguna tidak memiliki alamat email.")
     else:
         messages.warning(request, "Kendaraan tidak ditemukan atau tidak memiliki pengguna.")
 
@@ -242,14 +250,32 @@ def riwayat_pelanggaran_user(request):
 def pengguna_bayar_sanksi(request, pelanggaran_id):
     pelanggaran = get_object_or_404(Pelanggaran, id_pelanggaran=pelanggaran_id)
 
-    # Validasi bahwa pelanggaran ini milik user
     kendaraan_user = Kendaraan.objects.filter(user=request.user)
     if not kendaraan_user.filter(plat_nomor=pelanggaran.plate_number).exists():
         raise PermissionDenied("Pelanggaran ini bukan milik Anda.")
 
-    # Update status
     pelanggaran.status = "Selesai"
     pelanggaran.save()
 
     messages.success(request, "Terima kasih, pelanggaran telah diselesaikan.")
-    return redirect('notifikasi')  # arahkan ke riwayat atau notifikasi user
+    return redirect('notifikasi')
+
+# === TAMBAHAN ===
+@admin_required
+def kendaraan_edit(request, id):
+    kendaraan = get_object_or_404(Kendaraan, id_kendaraan=id)
+    form = KendaraanForm(request.POST or None, request.FILES or None, instance=kendaraan)
+    if request.method == 'POST' and form.is_valid():
+        form.save()
+        messages.success(request, 'Data kendaraan berhasil diperbarui.')
+        return redirect('kendaraan_list')
+    return render(request, 'halaman/kendaraan_form.html', {'form': form, 'title': 'Edit Data Kendaraan'})
+
+@admin_required
+def kendaraan_delete(request, id):
+    kendaraan = get_object_or_404(Kendaraan, id_kendaraan=id)
+    if request.method == 'POST':
+        kendaraan.delete()
+        messages.success(request, 'Data kendaraan berhasil dihapus.')
+        return redirect('kendaraan_list')
+    return render(request, 'halaman/kendaraan_confirm_delete.html', {'kendaraan': kendaraan})

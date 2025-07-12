@@ -6,41 +6,71 @@ from django.contrib.auth.models import User
 from django.utils.timezone import now
 from django.http import HttpResponse
 from io import BytesIO
-from django.core.files.base import ContentFile
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.units import cm
-from datetime import datetime, date
-from PIL import Image
-import paho.mqtt.client as mqtt
-import base64
-import threading
-import json
+from datetime import date
+from django.contrib import messages
 
+# Import dari views utama (pastikan ini ada)
+from .views import admin_required
+
+
+# ================================
+#         DATA KENDARAAN
+# ================================
+
+@admin_required
 def kendaraan_list(request):
     kendaraan_list = Kendaraan.objects.all()
     return render(request, 'kendaraan/kendaraan_list.html', {'kendaraan_list': kendaraan_list})
 
+@admin_required
 def kendaraan_create(request):
     if request.method == 'POST':
         form = KendaraanForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Data kendaraan berhasil ditambahkan.')
             return redirect('kendaraan_list')
     else:
         form = KendaraanForm()
-    return render(request, 'kendaraan/kendaraan_form.html', {'form': form})
+    return render(request, 'kendaraan/kendaraan_form.html', {
+        'form': form,
+        'title': 'Tambah Data Kendaraan'
+    })
 
+@admin_required
+def kendaraan_edit(request, id):
+    kendaraan = get_object_or_404(Kendaraan, id_kendaraan=id)
+    form = KendaraanForm(request.POST or None, request.FILES or None, instance=kendaraan)
+    if request.method == 'POST' and form.is_valid():
+        form.save()
+        messages.success(request, 'Data kendaraan berhasil diperbarui.')
+        return redirect('kendaraan_list')
+    return render(request, 'kendaraan/kendaraan_form.html', {'form': form, 'title': 'Edit Data Kendaraan'})
+
+@admin_required
+def kendaraan_delete(request, id):
+    kendaraan = get_object_or_404(Kendaraan, id_kendaraan=id)
+    if request.method == 'POST':
+        kendaraan.delete()
+        messages.success(request, 'Data kendaraan berhasil dihapus.')
+        return redirect('kendaraan_list')
+    return render(request, 'kendaraan/kendaraan_confirm_delete.html', {'kendaraan': kendaraan})
+
+
+# ================================
+#      PELANGGARAN DAN HISTORI
+# ================================
+
+@admin_required
 def pelanggaran_list(request):
     today = date.today()
     total_today = Pelanggaran.objects.filter(waktu__date=today).count()
     ditindak = Pelanggaran.objects.filter(status='Ditindak').count()
     selesai = Pelanggaran.objects.filter(status='Selesai').count()
-
-    try:
-        kamera_aktif = Kamera.objects.filter(status='Aktif').count()
-    except:
-        kamera_aktif = 0
+    kamera_aktif = Kamera.objects.filter(status='Aktif').count()
 
     pelanggarans = Pelanggaran.objects.all().select_related('kendaraan')
     return render(request, 'halaman/dashboard.html', {
@@ -50,6 +80,7 @@ def pelanggaran_list(request):
         'selesai': selesai,
         'kamera_aktif': kamera_aktif,
     })
+
 
 @login_required
 def histori_pelanggaran(request):
@@ -67,6 +98,7 @@ def histori_pelanggaran(request):
         template = 'pengguna/history_pengguna.html'
 
     return render(request, template, {'pelanggarans': pelanggarans})
+
 
 @login_required
 def download_histori_pdf(request):
@@ -104,11 +136,13 @@ def download_histori_pdf(request):
     p.save()
     buffer.seek(0)
     return HttpResponse(buffer, content_type='application/pdf', headers={
-        'Content-Disposition': 'attachment; filename="histori_pelanggaran.pdf"',
+        'Content-Disposition': 'attachment; filename=\"histori_pelanggaran.pdf\"',
     })
 
-# ✅ Fungsi hapus pelanggaran
+
+@admin_required
 def hapus_pelanggaran(request, id):
     pelanggaran = get_object_or_404(Pelanggaran, id_pelanggaran=id)
     pelanggaran.delete()
+    messages.success(request, 'Pelanggaran berhasil dihapus.')
     return redirect('dashboard')

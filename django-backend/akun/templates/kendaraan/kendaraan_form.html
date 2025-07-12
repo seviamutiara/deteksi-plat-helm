@@ -3,31 +3,134 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Tambah Kendaraan</title>
+    <title>{{ title }}</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f4f6f8;
+            color: #333;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 220px;
+            background-color: #0d0c2d;
+            color: white;
+            padding: 20px;
+        }
+
+        .sidebar h2 {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+        }
+
+        .sidebar nav a {
+            display: block;
+            padding: 10px;
+            color: #ccc;
+            text-decoration: none;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+
+        .sidebar nav a:hover {
+            background-color: #2e2c6a;
+            color: white;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 30px;
+        }
+
+        .form-card {
+            background-color: white;
+            padding: 25px 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            max-width: 600px;
+        }
+
+        .form-card h1 {
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+
+        form label {
+            display: block;
+            margin-top: 15px;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        form input, form select, form textarea {
+            width: 100%;
+            padding: 10px;
+            font-size: 14px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+
+        .btn-primary {
+            background-color: #0d6efd;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            margin-top: 20px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .btn-primary:hover {
+            background-color: #0b5ed7;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+            padding: 10px 16px;
+            border: none;
+            border-radius: 6px;
+            margin-left: 10px;
+            text-decoration: none;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <aside class="sidebar">
-            <h2>Kamera Pintar</h2>
-            <nav>
-                <a href="{% url 'dashboard' %}">Dashboard</a>
-                <a href="{% url 'history' %}">Histori Pelanggaran</a>
-                <a href="{% url 'kendaraan_list' %}">Data Kendaraan</a>
-                <a href="{% url 'user_list' %}">Kelola Akun</a>
-                <a href="{% url 'logout' %}">Logout</a>
-            </nav>
-        </aside>
+<div class="container">
+    <aside class="sidebar">
+        <h2>Kamera Pintar</h2>
+        <nav>
+            <a href="{% url 'dashboard' %}">Dashboard</a>
+            <a href="{% url 'history' %}">Histori Pelanggaran</a>
+            <a href="{% url 'kendaraan_list' %}">Data Kendaraan</a>
+            <a href="{% url 'user_list' %}">Kelola Akun</a>
+            <a href="{% url 'logout' %}">Logout</a>
+        </nav>
+    </aside>
 
-        <main class="main-content">
-            <h1>Tambah Data Kendaraan</h1>
+    <main class="main-content">
+        <div class="form-card">
+            <h1>{{ title }}</h1>
             <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 {{ form.as_p }}
-                <button type="submit" class="btn">Simpan</button>
-                <a href="{% url 'kendaraan_list' %}">Kembali</a>
+                <button type="submit" class="btn-primary">Simpan</button>
+                <a href="{% url 'kendaraan_list' %}" class="btn-secondary">Kembali</a>
             </form>
-        </main>
-    </div>
+        </div>
+    </main>
+</div>
 </body>
 </html>

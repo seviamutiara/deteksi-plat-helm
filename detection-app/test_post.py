@@ -9,10 +9,10 @@ with open("1.jpg", "rb") as image_file:
 # FORMAT PAYLOAD
 payload = {
     "waktu": datetime.now().isoformat(),
-    "plate_number": "BP1234XY",
+    "plate_number": "BP 4305 CR		",
     "confidence": 0.93,
     "image_base64": encoded_image,
-    "lokasi": "Simulasi Jalur Utama",
+    "lokasi": "Simulasi Jalur Utama kampus",
     "status": "Belum Ditindak"
 }
 
