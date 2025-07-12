@@ -62,7 +62,7 @@ ROOT_URLCONF = 'PENGENALAN.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['templates'],
+        'DIRS': [BASE_DIR / 'templates'],  # ✅ ini yang penting!
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

@@ -114,40 +114,48 @@ def user_delete(request, pk):
         return redirect('user_list')
     return render(request, 'halaman/user_confirm_delete.html', {'user': user})
 
-# Notifikasi
+from django.contrib import messages
+
 @login_required
 def kirim_notifikasi(request, pelanggaran_id):
     pelanggaran = get_object_or_404(Pelanggaran, id_pelanggaran=pelanggaran_id)
     admin = request.user
-    kendaraan = Kendaraan.objects.filter(plat_nomor=pelanggaran.plate_number).first()
+
+    kendaraan = Kendaraan.objects.filter(plat_nomor=pelanggaran.plat_nomor).first()
 
     if kendaraan and kendaraan.user:
         pengguna = kendaraan.user
-        subject = "Notifikasi Pelanggaran Lalu Lintas"
-        message = f"""
-        Halo {pengguna.username},
 
-        Anda telah melakukan pelanggaran lalu lintas:
-        - Lokasi: {pelanggaran.lokasi}
-        - Waktu: {pelanggaran.waktu.strftime('%d-%m-%Y %H:%M')}
-        - Plat Nomor: {pelanggaran.plate_number}
+        if pengguna.email:
+            subject = "Notifikasi Pelanggaran Lalu Lintas"
+            message = f"""
+            Halo {pengguna.username},
 
-        Silakan tindak lanjuti pelanggaran Anda Dengan Membayar Sanksi
+            Anda telah melakukan pelanggaran lalu lintas:
+            - Lokasi: {pelanggaran.lokasi}
+            - Waktu: {pelanggaran.waktu.strftime('%d-%m-%Y %H:%M')}
+            - Plat Nomor: {pelanggaran.plat_nomor}
 
-        Terima kasih,
-        Kamera Pintar
-        """
-        send_mail(subject, message, 'vikraselpian@gmail.com', [pengguna.email])
-        Notifikasi.objects.create(
-            user=pengguna,
-            pelanggaran=pelanggaran,
-            admin=admin,
-            metode='Email',
-            tanggal_kirim=timezone.now(),
-            status_baca=False
-        )
-        pelanggaran.status = "Ditindak"
-        pelanggaran.save()
+            Silakan tindak lanjuti pelanggaran Anda dengan membayar sanksi.
+
+            Terima kasih,
+            Kamera Pintar
+            """
+            send_mail(subject, message, 'vikraselpian@gmail.com', [pengguna.email])
+
+            Notifikasi.objects.create(
+                user=pengguna,
+                pelanggaran=pelanggaran,
+                admin=admin,
+                metode='Email',
+                tanggal_kirim=timezone.now(),
+                status_baca=False
+            )
+            pelanggaran.status = "Ditindak"
+            pelanggaran.save()
+            messages.success(request, f"Notifikasi berhasil dikirim ke {pengguna.username}")
+        else:
+            messages.warning(request, "Pengguna tidak memiliki alamat email.")
     else:
         messages.warning(request, "Kendaraan tidak ditemukan atau tidak memiliki pengguna.")
 
