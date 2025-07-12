@@ -1,5 +1,4 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -16,14 +15,13 @@
     }
 
     .navbar {
-      background-color: #2E2E69; /* sesuai warna di screenshot */
+      background-color: #2E2E69;
       color: white;
       padding: 1rem 2rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-top-left-radius: 10px;
-      border-top-right-radius: 10px;
+      flex-wrap: wrap;
     }
 
     .navbar .logo {
@@ -39,8 +37,7 @@
     }
 
     .navbar nav a:hover {
-      text-decoration: underline;
-      color: #FFD700; /* emas sebagai highlight saat hover */
+      color: #FFD700;
     }
 
     .welcome-section {
@@ -52,6 +49,7 @@
       border-radius: 1rem;
       margin: 2rem;
       box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      flex-wrap: wrap;
     }
 
     .welcome-text {
@@ -73,43 +71,6 @@
       max-width: 100%;
     }
 
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 1rem;
-      padding: 0 2rem;
-    }
-
-    .card {
-      background: white;
-      padding: 1.5rem;
-      border-radius: 1rem;
-      box-shadow: 0 3px 8px rgba(0,0,0,0.08);
-      text-align: center;
-      transition: transform 0.2s;
-    }
-
-    .card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 5px 15px rgba(46,46,105,0.2);
-    }
-
-    .card i {
-      font-size: 2rem;
-      color: #2E2E69;
-      margin-bottom: 0.5rem;
-    }
-
-    .card .label {
-      font-weight: 600;
-      margin-bottom: 0.3rem;
-    }
-
-    .card .value {
-      font-size: 1.5rem;
-      font-weight: bold;
-    }
-
     .section {
       margin: 2rem;
     }
@@ -126,51 +87,28 @@
       border-radius: 0.5rem;
       border-collapse: collapse;
       box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      overflow-x: auto;
     }
 
     th, td {
-      padding: 0.8rem;
+      padding: 1rem;
+      text-align: center;
       border-bottom: 1px solid #ddd;
-      text-align: left;
     }
 
     th {
       background-color: #f0f0f0;
+      color: #2E2E69;
     }
 
-    .notifikasi {
-      background-color: white;
-      padding: 1rem;
-      border-radius: 0.5rem;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    tr:hover {
+      background-color: #f9f9f9;
     }
 
-    .notifikasi-item {
-      padding: 0.5rem 0;
-      border-bottom: 1px solid #eee;
-    }
-
-    .notifikasi-item:last-child {
-      border-bottom: none;
-    }
-
-    .btn {
-      background-color: #2E2E69;
-      color: white;
-      padding: 0.4rem 0.8rem;
-      border-radius: 0.3rem;
-      text-decoration: none;
-      font-size: 0.9rem;
-    }
-
-    .status-belum {
-      color: red;
-      font-weight: bold;
-    }
-
-    .status-sudah {
-      color: green;
-      font-weight: bold;
+    img {
+      border-radius: 5px;
+      max-height: 80px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
 
     @media (max-width: 768px) {
@@ -181,6 +119,15 @@
 
       .welcome-image {
         margin-top: 1rem;
+        text-align: center;
+      }
+
+      table {
+        font-size: 0.85rem;
+      }
+
+      th, td {
+        padding: 0.6rem;
       }
     }
   </style>
@@ -211,33 +158,44 @@
 <!-- RIWAYAT PELANGGARAN -->
 <div class="section">
   <h3>Riwayat Pelanggaran Terbaru</h3>
-    <table border="1" cellpadding="5" cellspacing="0">
-        <thead>
-            <tr>
-                <th>ID Pelanggaran</th>
-                <th>Plat Nomor</th>
-                <th>Waktu</th>
-                <th>Lokasi</th>
-                <th>Status</th>
-                <th>Bukti Gambar</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for p in pelanggarans %}
-            <tr>
-                <td>{{ p.id_pelanggaran }}</td>
-                <td>{{ p.kendaraan.plat_nomor }}</td>
-                <td>{{ p.waktu|date:"d M Y H:i" }}</td>
-                <td>{{ p.lokasi }}</td>
-                <td>{{ p.status }}</td>
-                <td><img src="{{ p.bukti_gambar.url }}" width="80"></td>
-            </tr>
-            {% empty %}
-            <tr><td colspan="6">Anda belum memiliki pelanggaran.</td></tr>
-            {% endfor %}
-        </tbody>
+  <div style="overflow-x:auto">
+    <table>
+      <thead>
+        <tr>
+          <th>ID Pelanggaran</th>
+          <th>Plat Nomor</th>
+          <th>Waktu</th>
+          <th>Lokasi</th>
+          <th>Status</th>
+          <th>Bukti Gambar</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for p in pelanggarans %}
+        <tr>
+          <td>{{ p.id_pelanggaran }}</td>
+          <td>{{ p.kendaraan.plat_nomor }}</td>
+          <td>{{ p.waktu|date:"d M Y H:i" }}</td>
+          <td>{{ p.lokasi }}</td>
+          <td>{{ p.status }}</td>
+          <td>
+            {% if p.bukti_gambar %}
+              <img src="{{ p.bukti_gambar.url }}" alt="Bukti">
+            {% else %}
+              Tidak ada gambar
+            {% endif %}
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="6">Anda belum memiliki pelanggaran.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
     </table>
+  </div>
 </div>
-</body>
+
 {% include "partials/footer.html" %}
+</body>
 </html>

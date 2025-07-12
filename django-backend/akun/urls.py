@@ -1,6 +1,10 @@
 from django.urls import path
 from . import views, pengguna_views, halaman_views
 from .api_views import daftar_plat_terdaftar
+from django.urls import path
+from . import api_views
+from django.urls import path
+from . import views
 
 urlpatterns = [
     path('', halaman_views.pelanggaran_list, name='beranda'),  # ✅ Arahkan root ke dashboard
@@ -41,7 +45,7 @@ urlpatterns = [
 
 
     # API
-    path('api/violations/', views.api_tambah_pelanggaran, name='api_tambah_pelanggaran'),
+    path('api/violations/', views.create_violation, name='api_tambah_pelanggaran'),
     path('api/plat-terdaftar/', daftar_plat_terdaftar, name='daftar_plat_terdaftar'),
 
     path('kendaraan/edit/<int:id>/', halaman_views.kendaraan_edit, name='kendaraan_edit'),

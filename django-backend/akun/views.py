@@ -8,10 +8,21 @@ from django.utils import timezone
 from django.contrib.auth import views as auth_views
 from django.core.mail import send_mail
 from django.http import JsonResponse
+from django.core.files.base import ContentFile
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+
+
+import base64
+import uuid
+
 from .models import Pelanggaran, Notifikasi, Kendaraan, User
 from .forms import CustomUserCreationForm, CustomUserChangeForm, KendaraanForm
+from .serializers import PelanggaranSerializer
 
-# Role check decorator
+# ================= DECORATORS ================= #
 def admin_required(view_func):
     @login_required(login_url='login')
     def _wrapped_view(request, *args, **kwargs):
@@ -28,7 +39,7 @@ def user_required(view_func):
         raise PermissionDenied
     return _wrapped_view
 
-# Login & Logout
+# ================= AUTH ================= #
 def login_view(request):
     if request.user.is_authenticated:
         return redirect('dashboard' if request.user.role == 'admin' else 'home')
@@ -53,7 +64,7 @@ def logout_view(request):
     messages.success(request, 'Berhasil logout.')
     return redirect('login')
 
-# Dashboard
+# ================= DASHBOARD ================= #
 @admin_required
 def admin_dashboard(request):
     return render(request, 'halaman/dashboard.html')
@@ -62,7 +73,7 @@ def admin_dashboard(request):
 def user_dashboard(request):
     return render(request, 'pengguna/home.html')
 
-# Reset password views
+# ================= PASSWORD RESET ================= #
 class CustomPasswordResetView(auth_views.PasswordResetView):
     template_name = 'akun/lupa_password.html'
     email_template_name = 'akun/email_reset_password.html'
@@ -77,7 +88,7 @@ class CustomPasswordResetConfirmView(auth_views.PasswordResetConfirmView):
 class CustomPasswordResetCompleteView(auth_views.PasswordResetCompleteView):
     template_name = 'akun/reset_password_selesai.html'
 
-# Kelola pengguna
+# ================= USER MANAGEMENT ================= #
 @admin_required
 def user_list(request):
     users = User.objects.all().order_by('-id')
@@ -114,18 +125,15 @@ def user_delete(request, pk):
         return redirect('user_list')
     return render(request, 'halaman/user_confirm_delete.html', {'user': user})
 
-from django.contrib import messages
-
+# ================= PELANGGARAN DAN NOTIFIKASI ================= #
 @login_required
 def kirim_notifikasi(request, pelanggaran_id):
     pelanggaran = get_object_or_404(Pelanggaran, id_pelanggaran=pelanggaran_id)
+    kendaraan = Kendaraan.objects.filter(plat_nomor=pelanggaran.plate_number).first()
     admin = request.user
-
-    kendaraan = Kendaraan.objects.filter(plat_nomor=pelanggaran.plat_nomor).first()
 
     if kendaraan and kendaraan.user:
         pengguna = kendaraan.user
-
         if pengguna.email:
             subject = "Notifikasi Pelanggaran Lalu Lintas"
             message = f"""
@@ -134,7 +142,7 @@ def kirim_notifikasi(request, pelanggaran_id):
             Anda telah melakukan pelanggaran lalu lintas:
             - Lokasi: {pelanggaran.lokasi}
             - Waktu: {pelanggaran.waktu.strftime('%d-%m-%Y %H:%M')}
-            - Plat Nomor: {pelanggaran.plat_nomor}
+            - Plat Nomor: {pelanggaran.plate_number}
 
             Silakan tindak lanjuti pelanggaran Anda dengan membayar sanksi.
 
@@ -174,93 +182,69 @@ def notifikasi_user_view(request):
     return render(request, 'pengguna/notifikasi.html', {'notifikasi': notifikasi})
 
 @login_required
-def pengguna_bayar_sanksi(request, id_pelanggaran):
-    pelanggaran = get_object_or_404(Pelanggaran, id_pelanggaran=id_pelanggaran, kendaraan__user=request.user)
+@user_required
+def pengguna_bayar_sanksi(request, pelanggaran_id):
+    pelanggaran = get_object_or_404(Pelanggaran, id_pelanggaran=pelanggaran_id)
+    kendaraan_user = Kendaraan.objects.filter(user=request.user)
+    if not kendaraan_user.filter(plat_nomor=pelanggaran.plate_number).exists():
+        raise PermissionDenied("Pelanggaran ini bukan milik Anda.")
 
     if request.method == 'POST':
         bukti = request.FILES.get('bukti_pembayaran')
-
         if bukti:
             pelanggaran.bukti_pembayaran = bukti
             pelanggaran.status = 'Selesai'
             pelanggaran.save()
-
             messages.success(request, "Bukti pembayaran berhasil dikirim.")
-            return redirect('notifikasi_html')
-        else:
-            messages.error(request, "Silakan unggah bukti pembayaran terlebih dahulu.")
+            return redirect('notifikasi')
+        messages.error(request, "Silakan unggah bukti pembayaran terlebih dahulu.")
 
     return render(request, 'pengguna/form_pembayaran.html', {'pelanggaran': pelanggaran})
 
 @login_required
 def verifikasi_pembayaran(request, id_pelanggaran):
     pelanggaran = get_object_or_404(Pelanggaran, id_pelanggaran=id_pelanggaran)
-
     if pelanggaran.bukti_pembayaran and pelanggaran.status == 'Ditindak':
         pelanggaran.status = 'Selesai'
         pelanggaran.save()
         messages.success(request, "Pembayaran berhasil diverifikasi.")
     else:
         messages.error(request, "Bukti pembayaran belum tersedia atau status tidak sesuai.")
-
     return redirect('dashboard')
 
-# === API ENDPOINT ===
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-from .serializers import PelanggaranSerializer
-
-@api_view(['POST'])
-def api_tambah_pelanggaran(request):
-    data = request.data
-    plat = data.get("plate_number")
-    kendaraan = Kendaraan.objects.filter(plat_nomor=plat).first()
-
-    pelanggaran = Pelanggaran.objects.create(
-        plate_number=plat,
-        kendaraan=kendaraan,
-        confidence=data.get("confidence", 0.0),
-        image_base64=data.get("image_base64", ""),
-        waktu=data.get("waktu"),
-        lokasi=data.get("lokasi", "Tidak diketahui"),
-        status=data.get("status", "Belum Ditindak"),
-        kamera=None  # Tambahkan logika kamera jika perlu
-    )
-
-    return Response({'message': 'Pelanggaran berhasil disimpan.'})
-
-@api_view(['GET'])
-def daftar_plat_terdaftar(request):
-    plat_list = list(Kendaraan.objects.values_list('plat_nomor', flat=True))
-    return JsonResponse({"plat_terdaftar": plat_list})
-
-# Riwayat pelanggaran pengguna
 @login_required
 def riwayat_pelanggaran_user(request):
     kendaraan_user = Kendaraan.objects.filter(user=request.user)
     plat_user = kendaraan_user.values_list('plat_nomor', flat=True)
-    pelanggarans = Pelanggaran.objects.filter(
-        plate_number__in=plat_user,
-        status='Selesai'
-    ).order_by('-waktu')
+    pelanggarans = Pelanggaran.objects.filter(plate_number__in=plat_user, status='Selesai').order_by('-waktu')
     return render(request, 'pengguna/history_pengguna.html', {'pelanggarans': pelanggarans})
 
-@login_required
-@user_required
-def pengguna_bayar_sanksi(request, pelanggaran_id):
-    pelanggaran = get_object_or_404(Pelanggaran, id_pelanggaran=pelanggaran_id)
+# ================= API ENDPOINT ================= #
+@api_view(['POST'])
+def create_violation(request):
+    data = request.data.copy()
 
-    kendaraan_user = Kendaraan.objects.filter(user=request.user)
-    if not kendaraan_user.filter(plat_nomor=pelanggaran.plate_number).exists():
-        raise PermissionDenied("Pelanggaran ini bukan milik Anda.")
+    # Decode image_base64 ke file gambar
+    if "image_base64" in data:
+        img_data = base64.b64decode(data["image_base64"])
+        filename = f"{uuid.uuid4()}.jpg"
+        data["bukti_gambar"] = ContentFile(img_data, name=filename)
 
-    pelanggaran.status = "Selesai"
-    pelanggaran.save()
+    # Hubungkan kendaraan jika ditemukan
+    plat_nomor = data.get("plate_number")
+    try:
+        kendaraan = Kendaraan.objects.get(plat_nomor=plat_nomor)
+        data["kendaraan"] = kendaraan.id_kendaraan  # <-- perhatikan ini!
+    except Kendaraan.DoesNotExist:
+        data["kendaraan"] = None
+        print("Kendaraan tidak ditemukan")
 
-    messages.success(request, "Terima kasih, pelanggaran telah diselesaikan.")
-    return redirect('notifikasi')
-
-# === TAMBAHAN ===
+    serializer = PelanggaranSerializer(data=data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=201)
+    return Response(serializer.errors, status=400)
+# ================= KENDARAAN CRUD ================= #
 @admin_required
 def kendaraan_edit(request, id):
     kendaraan = get_object_or_404(Kendaraan, id_kendaraan=id)

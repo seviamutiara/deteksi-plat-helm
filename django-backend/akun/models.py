@@ -6,9 +6,11 @@ class User(AbstractUser):
         ('admin', 'Admin'),
         ('user', 'User'),
     )
+    nim = models.CharField(max_length=20, blank=True, null=True)  # ← Tambahkan ini
     role = models.CharField(max_length=10, choices=ROLE_CHOICES)
     no_hp = models.CharField(max_length=20, blank=True, null=True)
     alamat = models.TextField(blank=True, null=True)
+
 
 class Kendaraan(models.Model):
     id_kendaraan = models.AutoField(primary_key=True)

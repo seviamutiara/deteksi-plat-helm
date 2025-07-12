@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <title>Kelola Pengguna</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         body {
             margin: 0;
@@ -75,16 +76,13 @@
             background-color: #0b5ed7;
         }
 
-        .table-section h2 {
-            margin-bottom: 10px;
-        }
-
         table {
             width: 100%;
             border-collapse: collapse;
             background-color: white;
             border-radius: 6px;
             overflow: hidden;
+            margin-top: 10px;
         }
 
         table th, table td {
@@ -97,16 +95,35 @@
             background-color: #f8f9fa;
         }
 
-        a {
-            color: #0d6efd;
+        .aksi a {
+            padding: 6px 10px;
+            font-size: 13px;
+            font-weight: 500;
+            border-radius: 4px;
             text-decoration: none;
         }
 
-        a:hover {
-            text-decoration: underline;
+        .aksi a.edit {
+            background-color: #3498db;
+            color: white;
+            margin-right: 5px;
+        }
+
+        .aksi a.hapus {
+            background-color: #e74c3c;
+            color: white;
         }
 
         @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                text-align: center;
+            }
+
             .main-content {
                 padding: 20px;
                 margin: 20px;
@@ -125,57 +142,59 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <aside class="sidebar">
-            <h2>Kamera Pintar</h2>
-            <nav>
-                <a href="{% url 'dashboard' %}">Dashboard</a>
-                <a href="{% url 'history' %}">Histori Pelanggaran</a>
-                <a href="{% url 'kendaraan_list' %}">Data Kendaraan</a>
-                <a href="{% url 'user_list' %}">Kelola Akun</a>
-                <a href="{% url 'logout' %}">Logout</a>
-            </nav>
-        </aside>
+<div class="container">
+    <aside class="sidebar">
+        <h2>Kamera Pintar</h2>
+        <nav>
+            <a href="{% url 'dashboard' %}">Dashboard</a>
+            <a href="{% url 'history' %}">Histori Pelanggaran</a>
+            <a href="{% url 'kendaraan_list' %}">Data Kendaraan</a>
+            <a href="{% url 'user_list' %}">Kelola Akun</a>
+            <a href="{% url 'logout' %}">Logout</a>
+        </nav>
+    </aside>
 
-        <main class="main-content">
-            <header>
-                <h1>Kelola Pengguna</h1>
-                <a href="{% url 'user_create' %}" class="btn">+ Tambah Akun</a>
-            </header>
+    <main class="main-content">
+        <header>
+            <h1>Kelola Pengguna</h1>
+            <a href="{% url 'user_create' %}" class="btn">+ Tambah Akun</a>
+        </header>
 
-            <section class="table-section">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Username</th>
-                            <th>Email</th>
-                            <th>Role</th>
-                            <th>No HP</th>
-                            <th>Alamat</th>
-                            <th>Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for user in users %}
-                        <tr>
-                            <td>{{ user.username }}</td>
-                            <td>{{ user.email }}</td>
-                            <td>{{ user.role }}</td>
-                            <td>{{ user.no_hp }}</td>
-                            <td>{{ user.alamat }}</td>
-                            <td>
-                                <a href="{% url 'user_edit' user.pk %}">Edit</a> |
-                                <a href="{% url 'user_delete' user.pk %}" onclick="return confirm('Yakin ingin menghapus akun ini?')">Hapus</a>
-                            </td>
-                        </tr>
-                        {% empty %}
-                        <tr><td colspan="6">Belum ada akun terdaftar.</td></tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </section>
-        </main>
-    </div>
-</body>
+        <section class="table-section">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>NIM</th>
+                        <th>Role</th>
+                        <th>No HP</th>
+                        <th>Alamat</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.nim }}</td>
+                        <td>{{ user.get_role_display }}</td>
+                        <td>{{ user.no_hp }}</td>
+                        <td>{{ user.alamat }}</td>
+                        <td class="aksi">
+                            <a href="{% url 'user_edit' user.pk %}" class="edit">Edit</a>
+                            <a href="{% url 'user_delete' user.pk %}" class="hapus" onclick="return confirm('Yakin ingin menghapus akun ini?')">Hapus</a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="7">Belum ada akun terdaftar.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+    </main>
+</div>
 {% include "partials/footer.html" %}
+</body>
 </html>

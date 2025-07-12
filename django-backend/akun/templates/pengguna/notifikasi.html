@@ -21,6 +21,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
         }
 
         .navbar .logo {
@@ -41,7 +42,7 @@
 
         .judul-dengan-gambar {
             text-align: center;
-            margin: 2rem auto;
+            margin: 2rem auto 1rem;
         }
 
         .judul-dengan-gambar img {
@@ -57,11 +58,13 @@
             padding: 2rem;
             border-radius: 1rem;
             box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
+            margin-bottom: 3rem;
         }
 
         h2 {
             color: #2E2E69;
             margin-bottom: 1.5rem;
+            text-align: center;
         }
 
         table {
@@ -85,25 +88,12 @@
             background-color: #f9f9f9;
         }
 
-        .btn-success {
-            background-color: #28a745;
-            color: white;
-            padding: 6px 12px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.9rem;
-        }
-
-        .btn-success:hover {
-            background-color: #218838;
-        }
-
         .badge {
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-weight: 500;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-weight: 600;
             font-size: 0.9rem;
+            display: inline-block;
         }
 
         .bg-success {
@@ -122,10 +112,6 @@
         }
 
         @media (max-width: 768px) {
-            table {
-                font-size: 0.85rem;
-            }
-
             .navbar {
                 flex-direction: column;
                 align-items: flex-start;
@@ -138,75 +124,81 @@
             .container {
                 padding: 1rem;
             }
+
+            table {
+                font-size: 0.85rem;
+            }
+
+            th, td {
+                padding: 0.6rem;
+            }
         }
     </style>
 </head>
 <body>
 
-    <!-- NAVBAR -->
-    <header class="navbar">
-        <div class="logo">Kamera Pintar</div>
-        <nav>
-            <a href="{% url 'home' %}">Dashboard</a>
-            <a href="{% url 'history' %}">Riwayat</a>
-            <a href="{% url 'logout' %}">Logout</a>
-        </nav>
-    </header>
+<!-- NAVBAR -->
+<header class="navbar">
+    <div class="logo">Kamera Pintar</div>
+    <nav>
+        <a href="{% url 'home' %}">Dashboard</a>
+        <a href="{% url 'history' %}">Riwayat</a>
+        <a href="{% url 'logout' %}">Logout</a>
+    </nav>
+</header>
 
-    <!-- JUDUL + GAMBAR -->
-    <div class="judul-dengan-gambar">
-        <img src="{% static 'img/motor.png' %}" alt="Scooter Kid">
-    </div>
+<!-- GAMBAR & JUDUL -->
+<div class="judul-dengan-gambar">
+    <img src="{% static 'img/motor.png' %}" alt="Scooter Kid">
+</div>
 
-    <!-- ISI TABEL -->
-    <div class="container">
-        <h2>Notifikasi Pelanggaran Anda</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Pelanggaran</th>
-                    <th>Status Baca</th>
-                    <th>Metode</th>
-                    <th>Tanggal Dikirim</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for notif in notifikasi %}
-                <tr>
-                    <td>{{ notif.notif_id }}</td>
-                    <td>{{ notif.pelanggaran.lokasi }} ({{ notif.pelanggaran.waktu|date:"d M Y H:i" }})</td>
-                    <td>
-                        {% if notif.status_baca %}
-                            <span class="badge bg-success">Sudah</span>
-                        {% else %}
-                            <span class="badge bg-warning">Belum</span>
-                        {% endif %}
-                    </td>
-                    <td>{{ notif.metode }}</td>
-                    <td>{{ notif.tanggal_kirim|date:"d M Y H:i" }}</td>
-                    <td>
-                        {% if notif.pelanggaran.status == "Ditindak" %}
-                            <form action="{% url 'pengguna_bayar_sanksi' notif.pelanggaran.id_pelanggaran %}" method="post" style="display:inline;">
-                                {% csrf_token %}
-                                <button class="btn-success" type="submit">Bayar & Selesaikan</button>
-                            </form>
-                        {% elif notif.pelanggaran.status == "Selesai" %}
-                            <span class="badge bg-success">Selesai</span>
-                        {% else %}
-                            <span class="badge bg-secondary">Belum Ditindak</span>
-                        {% endif %}
-                    </td>
-                </tr>
-                {% empty %}
-                <tr>
-                    <td colspan="6">Belum ada notifikasi untuk Anda.</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-</body>
+<!-- ISI NOTIFIKASI -->
+<div class="container">
+    <h2>Notifikasi Pelanggaran Anda</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Pelanggaran</th>
+                <th>Status Baca</th>
+                <th>Metode</th>
+                <th>Tanggal Dikirim</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for notif in notifikasi %}
+            <tr>
+                <td>{{ notif.notif_id }}</td>
+                <td>{{ notif.pelanggaran.lokasi }}<br><small>{{ notif.pelanggaran.waktu|date:"d M Y H:i" }}</small></td>
+                <td>
+                    {% if notif.status_baca %}
+                        <span class="badge bg-success">Sudah</span>
+                    {% else %}
+                        <span class="badge bg-warning">Belum</span>
+                    {% endif %}
+                </td>
+                <td>{{ notif.metode }}</td>
+                <td>{{ notif.tanggal_kirim|date:"d M Y H:i" }}</td>
+                <td>
+                    {% if notif.pelanggaran.status == "Selesai" %}
+                        <span class="badge bg-success">Selesai</span>
+                    {% elif notif.pelanggaran.status == "Ditindak" %}
+                        <span class="badge bg-warning">Ditindak</span>
+                    {% else %}
+                        <span class="badge bg-secondary">Belum Ditindak</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6">Belum ada notifikasi untuk Anda.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
 {% include "partials/footer.html" %}
+</body>
 </html>

@@ -1,14 +1,13 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.hashers import make_password
-from .models import User, Kendaraan
-from .models import Pelanggaran
+from .models import User, Kendaraan, Pelanggaran
 
-# === FORM AKUN ===
+# === FORM BUAT AKUN ===
 class CustomUserCreationForm(UserCreationForm):
     class Meta:
         model = User
-        fields = ('username', 'email', 'role', 'no_hp', 'alamat', 'password1', 'password2')
+        fields = ('username', 'email', 'nim', 'role', 'no_hp', 'alamat', 'password1', 'password2')
 
     def save(self, commit=True):
         user = super().save(commit=False)
@@ -22,6 +21,7 @@ class CustomUserCreationForm(UserCreationForm):
             user.save()
         return user
 
+# === FORM EDIT AKUN ===
 class CustomUserChangeForm(forms.ModelForm):
     password1 = forms.CharField(
         label='Password Baru (Opsional)',
@@ -36,7 +36,7 @@ class CustomUserChangeForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'role', 'no_hp', 'alamat')
+        fields = ('username', 'email', 'nim', 'role', 'no_hp', 'alamat')
 
     def clean(self):
         cleaned_data = super().clean()
@@ -68,7 +68,7 @@ class KendaraanForm(forms.ModelForm):
         model = Kendaraan
         fields = ['plat_nomor', 'jenis_kendaraan', 'foto_kendaraan', 'user']
 
-# === BUKTI PEMBAYARAN FORM ===
+# === FORM BUKTI PEMBAYARAN ===
 class BuktiPembayaranForm(forms.ModelForm):
     class Meta:
         model = Pelanggaran

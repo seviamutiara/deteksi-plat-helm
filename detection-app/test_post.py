@@ -2,23 +2,36 @@ import base64
 import requests
 from datetime import datetime
 
-# BACA GAMBAR UJI
-with open("1.jpg", "rb") as image_file:
+# === KONFIGURASI ===
+IMAGE_PATH = "1.jpg"
+API_URL = "http://127.0.0.1:9000/api/violations/"
+KENDARAAN_ID = 3  # Pastikan kendaraan dengan ID ini ada di database
+
+# === BACA & ENCODE GAMBAR ===
+with open(IMAGE_PATH, "rb") as image_file:
     encoded_image = base64.b64encode(image_file.read()).decode("utf-8")
 
-# FORMAT PAYLOAD
+# === SIAPKAN PAYLOAD ===
 payload = {
     "waktu": datetime.now().isoformat(),
-    "plate_number": "BP 4305 CR		",
+    "plate_number": "BP 4305 CR",
     "confidence": 0.93,
     "image_base64": encoded_image,
     "lokasi": "Simulasi Jalur Utama kampus",
-    "status": "Belum Ditindak"
+    "status": "Belum Ditindak",
+    "jumlah_denda": "100000.00",
+    "bukti_pembayaran": None,
+    "kendaraan": KENDARAAN_ID,
+    "kamera": None
 }
 
-# KIRIM KE API DJANGO
-response = requests.post("http://localhost:8000/api/violations/", json=payload)
-
-# CEK HASIL
-print("Status:", response.status_code)
-print("Respon:", response.text)
+# === KIRIM POST REQUEST ===
+try:
+    response = requests.post(API_URL, json=payload)
+    print(f"\n✅ Status Code: {response.status_code}")
+    try:
+        print("📦 Response JSON:", response.json())
+    except Exception:
+        print("📃 Response Text:", response.text)
+except requests.exceptions.RequestException as e:
+    print("❌ Terjadi error saat mengirim request:", e)

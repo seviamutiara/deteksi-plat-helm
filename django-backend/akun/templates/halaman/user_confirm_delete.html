@@ -5,6 +5,116 @@
     <meta charset="UTF-8">
     <title>Hapus Akun</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f4f6f8;
+            color: #333;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: row;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 220px;
+            background-color: #0d0c2d;
+            color: white;
+            padding: 20px;
+            flex-shrink: 0;
+        }
+
+        .sidebar h2 {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+        }
+
+        .sidebar nav a {
+            display: block;
+            padding: 10px;
+            color: #ccc;
+            text-decoration: none;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+
+        .sidebar nav a:hover {
+            background-color: #2e2c6a;
+            color: white;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 40px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            margin: 30px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            margin-top: 0;
+        }
+
+        .card.red {
+            background-color: #f8d7da;
+            border: 1px solid #f5c2c7;
+            padding: 20px;
+            border-radius: 8px;
+            color: #721c24;
+        }
+
+        .btn {
+            padding: 10px 16px;
+            background-color: #0d6efd;
+            color: white;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 14px;
+            text-decoration: none;
+            border: none;
+            margin-right: 10px;
+            cursor: pointer;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            background-color: #0b5ed7;
+        }
+
+        .btn.red {
+            background-color: #dc3545;
+        }
+
+        .btn.red:hover {
+            background-color: #bb2d3b;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                text-align: center;
+            }
+
+            .sidebar nav a {
+                display: inline-block;
+                margin: 5px;
+            }
+
+            .main-content {
+                margin: 10px;
+                padding: 20px;
+            }
+        }
+    </style>
 </head>
 <body>
 <div class="container">
@@ -25,7 +135,7 @@
 
         <section class="form-section">
             <div class="card red">
-                <p>Apakah Anda yakin ingin menghapus akun:</p>
+                <p>Apakah Anda yakin ingin menghapus akun ini?</p>
                 <h3>{{ user.username }} ({{ user.role }})</h3>
 
                 <form method="POST">
@@ -37,6 +147,6 @@
         </section>
     </main>
 </div>
-</body>
 {% include "partials/footer.html" %}
+</body>
 </html>

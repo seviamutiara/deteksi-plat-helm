@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <title>Histori Pelanggaran - Kamera Pintar</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         body {
             margin: 0;
@@ -15,6 +16,7 @@
 
         .container {
             display: flex;
+            flex-direction: row;
             min-height: 100vh;
         }
 
@@ -23,6 +25,7 @@
             background-color: #0d0c2d;
             color: white;
             padding: 20px;
+            flex-shrink: 0;
         }
 
         .sidebar h2 {
@@ -74,14 +77,15 @@
 
         .data-section {
             margin-top: 20px;
+            overflow-x: auto;
         }
 
         table.pelanggaran-table {
             width: 100%;
             border-collapse: collapse;
             border-radius: 6px;
-            overflow: hidden;
             background-color: white;
+            min-width: 800px;
         }
 
         table.pelanggaran-table th,
@@ -132,9 +136,23 @@
         }
 
         @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                text-align: center;
+            }
+
+            .sidebar nav a {
+                display: inline-block;
+                margin: 5px;
+            }
+
             .main-content {
+                margin: 10px;
                 padding: 20px;
-                margin: 20px;
             }
 
             table.pelanggaran-table {
@@ -216,7 +234,6 @@
             document.getElementById("imageModal").style.display = "none";
         }
 
-        // Tutup modal saat klik di luar gambar
         window.onclick = function(event) {
             const modal = document.getElementById("imageModal");
             if (event.target == modal) {
@@ -224,6 +241,7 @@
             }
         }
     </script>
+
+    {% include "partials/footer.html" %}
 </body>
-{% include "partials/footer.html" %}
 </html>

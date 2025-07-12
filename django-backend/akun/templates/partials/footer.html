@@ -1,10 +1,35 @@
 {% load static %}
-<footer style="background-color: #2E2E69; color: white; text-align: center; padding: 30px 20px; margin-top: 40px; font-size: 0.95em;">
+<footer style="
+    background-color: #2E2E69;
+    color: white;
+    text-align: center;
+    padding: 30px 20px;
+    font-size: 0.95em;
+    margin-top: 40px;
+">
     <div style="margin-bottom: 15px;">
-        <img src="{% static 'img/motor.png' %}" alt="Logo Kamera" style="height: 60px; margin-bottom: 10px;">
+        <img src="{% static 'img/motor.png' %}" alt="Logo Kamera" style="height: 60px; max-width: 100%; margin-bottom: 10px;">
     </div>
     <div>
-        <strong>Kamera Pintar</strong> - Sistem Deteksi Helm & Plat Nomor<br>
-        <span style="font-size: 0.9em;">Proyek PBL IF-52 | &copy; 2025</span>
+        <strong style="display: block; font-size: 1.1em;">Kamera Pintar</strong>
+        <span>Sistem Deteksi Helm & Plat Nomor</span><br>
+        <span style="font-size: 0.85em;">Proyek PBL IF-52 &copy; 2025</span>
     </div>
+
+    <style>
+        @media (max-width: 600px) {
+            footer {
+                padding: 20px 10px !important;
+                font-size: 0.9em !important;
+            }
+
+            footer img {
+                height: 45px !important;
+            }
+
+            footer strong {
+                font-size: 1em !important;
+            }
+        }
+    </style>
 </footer>
