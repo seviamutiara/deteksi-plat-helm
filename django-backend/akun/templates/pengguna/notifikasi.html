@@ -164,6 +164,7 @@
                 <th>Metode</th>
                 <th>Tanggal Dikirim</th>
                 <th>Status</th>
+                <th>Bukti Pembayaran</th>
             </tr>
         </thead>
         <tbody>
@@ -189,6 +190,17 @@
                         <span class="badge bg-secondary">Belum Ditindak</span>
                     {% endif %}
                 </td>
+                 <td>
+        {% if notif.pelanggaran.status != "Selesai" %}
+        <form method="post" enctype="multipart/form-data" action="{% url 'bayar_sanksi' notif.pelanggaran.id_pelanggaran %}">
+            {% csrf_token %}
+            <input type="file" name="bukti_pembayaran" accept="image/*,application/pdf" required>
+            <button type="submit">Upload</button>
+        </form>
+        {% else %}
+            <span class="badge bg-success">Sudah Bayar</span>
+        {% endif %}
+    </td>
             </tr>
             {% empty %}
             <tr>

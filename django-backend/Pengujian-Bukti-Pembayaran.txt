@@ -1,0 +1,39 @@
+Login user - 2025-07-19 13:48:04 - Status: Berhasil - 
+Cek Notifikasi - 2025-07-19 13:48:06 - Status: Berhasil - 2 notifikasi ditemukan
+Upload Bukti - 2025-07-19 13:48:06 - Status: Lewat - Tidak ada tombol Upload di notifikasi ke-1
+Upload Bukti - 2025-07-19 13:48:06 - Status: Lewat - Tidak ada tombol Upload di notifikasi ke-2
+Login user - 2025-07-19 13:50:38 - Status: Berhasil - 
+Upload Bukti - 2025-07-19 13:50:43 - Status: Berhasil - Notifikasi ke-1 diupload
+Error Umum - 2025-07-19 13:50:45 - Status: Gagal - Message: stale element reference: stale element not found
+  (Session info: chrome=138.0.7204.158); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#staleelementreferenceexception
+Stacktrace:
+	GetHandleVerifier [0x0x7ff74c3ee925+77845]
+	GetHandleVerifier [0x0x7ff74c3ee980+77936]
+	(No symbol) [0x0x7ff74c1a9cda]
+	(No symbol) [0x0x7ff74c1c00f4]
+	(No symbol) [0x0x7ff74c1bebc3]
+	(No symbol) [0x0x7ff74c1b23d9]
+	(No symbol) [0x0x7ff74c1b028f]
+	(No symbol) [0x0x7ff74c1b471c]
+	(No symbol) [0x0x7ff74c1b47ef]
+	(No symbol) [0x0x7ff74c1fff57]
+	(No symbol) [0x0x7ff74c20095c]
+	(No symbol) [0x0x7ff74c1f30ac]
+	(No symbol) [0x0x7ff74c22890f]
+	(No symbol) [0x0x7ff74c1f2f76]
+	(No symbol) [0x0x7ff74c228ae0]
+	(No symbol) [0x0x7ff74c250b07]
+	(No symbol) [0x0x7ff74c2286a3]
+	(No symbol) [0x0x7ff74c1f1791]
+	(No symbol) [0x0x7ff74c1f2523]
+	GetHandleVerifier [0x0x7ff74c6c683d+3059501]
+	GetHandleVerifier [0x0x7ff74c6c0bfd+3035885]
+	GetHandleVerifier [0x0x7ff74c6e03f0+3164896]
+	GetHandleVerifier [0x0x7ff74c408c2e+185118]
+	GetHandleVerifier [0x0x7ff74c41053f+216111]
+	GetHandleVerifier [0x0x7ff74c3f72d4+113092]
+	GetHandleVerifier [0x0x7ff74c3f7489+113529]
+	GetHandleVerifier [0x0x7ff74c3de288+10616]
+	BaseThreadInitThunk [0x0x7fffba3b7374+20]
+	RtlUserThreadStart [0x0x7fffbb61cc91+33]
+

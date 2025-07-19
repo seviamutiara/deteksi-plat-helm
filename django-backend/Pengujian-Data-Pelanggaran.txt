@@ -1,0 +1,4 @@
+Login Admin - 2025-07-19 12:52:54 - Status: Berhasil - 
+Kamera Simulasi - 2025-07-19 12:52:54 - Status: Mulai - Menjalankan test_post.py
+Kamera Simulasi - 2025-07-19 12:52:56 - Status: Selesai - Pengiriman pelanggaran selesai
+Verifikasi Pelanggaran - 2025-07-19 12:53:01 - Status: Berhasil - Data dari kamera muncul di tabel

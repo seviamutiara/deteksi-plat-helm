@@ -179,12 +179,14 @@ def tandai_selesai(request, pelanggaran_id):
 @login_required
 def notifikasi_user_view(request):
     notifikasi = Notifikasi.objects.filter(user=request.user).order_by('-tanggal_kirim')
+    notifikasi.filter(status_baca=False).update(status_baca=True)
+
     return render(request, 'pengguna/notifikasi.html', {'notifikasi': notifikasi})
 
 @login_required
 @user_required
-def pengguna_bayar_sanksi(request, pelanggaran_id):
-    pelanggaran = get_object_or_404(Pelanggaran, id_pelanggaran=pelanggaran_id)
+def pengguna_bayar_sanksi(request, id_pelanggaran):
+    pelanggaran = get_object_or_404(Pelanggaran, id_pelanggaran=id_pelanggaran)
     kendaraan_user = Kendaraan.objects.filter(user=request.user)
     if not kendaraan_user.filter(plat_nomor=pelanggaran.plate_number).exists():
         raise PermissionDenied("Pelanggaran ini bukan milik Anda.")
@@ -199,7 +201,7 @@ def pengguna_bayar_sanksi(request, pelanggaran_id):
             return redirect('notifikasi')
         messages.error(request, "Silakan unggah bukti pembayaran terlebih dahulu.")
 
-    return render(request, 'pengguna/form_pembayaran.html', {'pelanggaran': pelanggaran})
+    return render(request, 'pengguna/notifikasi.html', {'pelanggaran': pelanggaran})
 
 @login_required
 def verifikasi_pembayaran(request, id_pelanggaran):

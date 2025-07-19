@@ -8,16 +8,21 @@ API_URL = "http://127.0.0.1:9000/api/violations/"
 KENDARAAN_ID = 3  # Pastikan kendaraan dengan ID ini ada di database
 
 # === BACA & ENCODE GAMBAR ===
+import os
+
+BASE_DIR = os.path.dirname(__file__)
+IMAGE_PATH = os.path.join(BASE_DIR, "2.jpg")
+
 with open(IMAGE_PATH, "rb") as image_file:
     encoded_image = base64.b64encode(image_file.read()).decode("utf-8")
 
 # === SIAPKAN PAYLOAD ===
 payload = {
     "waktu": datetime.now().isoformat(),
-    "plate_number": "BP 4305 CR",
+    "plate_number": "BP 2871 JG",
     "confidence": 0.93,
     "image_base64": encoded_image,
-    "lokasi": "Simulasi Jalur Utama kampus",
+    "lokasi": "Parkiran Utama kampus",
     "status": "Belum Ditindak",
     "jumlah_denda": "100000.00",
     "bukti_pembayaran": None,

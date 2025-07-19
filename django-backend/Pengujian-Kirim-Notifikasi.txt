@@ -1,0 +1,7 @@
+Login Admin - 2025-07-19 12:55:55 - Status: Berhasil - 
+Kirim Notifikasi - 2025-07-19 12:55:57 - Status: Gagal - Tidak ada tombol 'Kirim Notifikasi' ditemukan untuk pelanggaran dari kamera
+Login Admin - 2025-07-19 12:59:48 - Status: Berhasil - 
+Cek Tombol - 2025-07-19 12:59:50 - Status: Tidak Ada - Baris 1 tidak memiliki tombol Kirim Notifikasi
+Login Admin - 2025-07-19 13:04:42 - Status: Berhasil - 
+Cek Tombol - 2025-07-19 13:04:44 - Status: Tidak Ada - Baris 1 tidak memiliki tombol Kirim Notifikasi
+Kirim Notifikasi - 2025-07-19 13:04:51 - Status: Berhasil - Tombol diklik di baris 2, Lokasi: Parkiran Utama kampus, Plat: BP 2871 JG

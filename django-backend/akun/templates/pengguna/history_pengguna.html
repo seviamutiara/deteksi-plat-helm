@@ -222,8 +222,8 @@
                         ">{{ p.status }}</span>
                     </td>
                     <td>
-                        {% if p.bukti_gambar %}
-                            <img src="{{ p.bukti_gambar.url }}" class="thumbnail" alt="Bukti" onclick="showModal(this.src)">
+                        {% if p.bukti_pembayaran %}
+                            <img src="{{ p.bukti_pembayaran.url}}" class="thumbnail" alt="Bukti" onclick="showModal(this.src)">
                         {% else %}
                             Tidak ada gambar
                         {% endif %}

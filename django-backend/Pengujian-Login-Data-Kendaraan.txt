@@ -1,0 +1,61 @@
+Login - 2025-07-19 11:13:20 - Status: Berhasil
+Data Kendaraan - 2025-07-19 11:13:20 - Status: Berhasil menampilkan 1 data
+Login - 2025-07-19 11:14:10 - Status: Berhasil
+Data Kendaraan - 2025-07-19 11:14:10 - Status: Berhasil menampilkan 1 data
+Login - 2025-07-19 11:38:34 - Status: Berhasil
+Data Kendaraan - 2025-07-19 11:38:34 - Status: Berhasil menampilkan 1 data
+Error - 2025-07-19 11:38:35 - Status: Message: invalid argument: File not found : C:\Users\VIKRASELPIAN\deteksi-plat-helm\django-backend\sample_car.jpg
+  (Session info: chrome=138.0.7204.158)
+Stacktrace:
+	GetHandleVerifier [0x0x7ff621cfe925+77845]
+	GetHandleVerifier [0x0x7ff621cfe980+77936]
+	(No symbol) [0x0x7ff621ab9cda]
+	(No symbol) [0x0x7ff621b0807f]
+	(No symbol) [0x0x7ff621b388ca]
+	(No symbol) [0x0x7ff621b02f76]
+	(No symbol) [0x0x7ff621b38ae0]
+	(No symbol) [0x0x7ff621b60b07]
+	(No symbol) [0x0x7ff621b386a3]
+	(No symbol) [0x0x7ff621b01791]
+	(No symbol) [0x0x7ff621b02523]
+	GetHandleVerifier [0x0x7ff621fd683d+3059501]
+	GetHandleVerifier [0x0x7ff621fd0bfd+3035885]
+	GetHandleVerifier [0x0x7ff621ff03f0+3164896]
+	GetHandleVerifier [0x0x7ff621d18c2e+185118]
+	GetHandleVerifier [0x0x7ff621d2053f+216111]
+	GetHandleVerifier [0x0x7ff621d072d4+113092]
+	GetHandleVerifier [0x0x7ff621d07489+113529]
+	GetHandleVerifier [0x0x7ff621cee288+10616]
+	BaseThreadInitThunk [0x0x7fffba3b7374+20]
+	RtlUserThreadStart [0x0x7fffbb61cc91+33]
+
+Login - 2025-07-19 11:39:15 - Status: Berhasil
+Data Kendaraan - 2025-07-19 11:39:15 - Status: Berhasil menampilkan 1 data
+Error - 2025-07-19 11:39:16 - Status: Message: invalid argument: File not found : C:\Users\VIKRASELPIAN\deteksi-plat-helm\django-backend\detection-app\2.jpg
+  (Session info: chrome=138.0.7204.158)
+Stacktrace:
+	GetHandleVerifier [0x0x7ff621cfe925+77845]
+	GetHandleVerifier [0x0x7ff621cfe980+77936]
+	(No symbol) [0x0x7ff621ab9cda]
+	(No symbol) [0x0x7ff621b0807f]
+	(No symbol) [0x0x7ff621b388ca]
+	(No symbol) [0x0x7ff621b02f76]
+	(No symbol) [0x0x7ff621b38ae0]
+	(No symbol) [0x0x7ff621b60b07]
+	(No symbol) [0x0x7ff621b386a3]
+	(No symbol) [0x0x7ff621b01791]
+	(No symbol) [0x0x7ff621b02523]
+	GetHandleVerifier [0x0x7ff621fd683d+3059501]
+	GetHandleVerifier [0x0x7ff621fd0bfd+3035885]
+	GetHandleVerifier [0x0x7ff621ff03f0+3164896]
+	GetHandleVerifier [0x0x7ff621d18c2e+185118]
+	GetHandleVerifier [0x0x7ff621d2053f+216111]
+	GetHandleVerifier [0x0x7ff621d072d4+113092]
+	GetHandleVerifier [0x0x7ff621d07489+113529]
+	GetHandleVerifier [0x0x7ff621cee288+10616]
+	BaseThreadInitThunk [0x0x7fffba3b7374+20]
+	RtlUserThreadStart [0x0x7fffbb61cc91+33]
+
+Login - 2025-07-19 11:40:39 - Status: Berhasil
+Data Kendaraan - 2025-07-19 11:40:39 - Status: Berhasil menampilkan 1 data
+Tambah Kendaraan - 2025-07-19 11:40:42 - Status: Berhasil menambahkan kendaraan baru

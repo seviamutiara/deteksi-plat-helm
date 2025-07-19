@@ -71,6 +71,7 @@
                         <th>Plat Nomor</th>
                         <th>Status</th>
                         <th>Aksi</th>
+                        <th>Bukti Pembayaran</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -84,8 +85,8 @@
                         <td>{{ pelanggaran.waktu|date:"d M Y H:i" }}</td>
                         <td>{{ pelanggaran.lokasi }}</td>
                         <td>
-                            {% if pelanggaran.plat_nomor %}
-                                {{ pelanggaran.plat_nomor }}
+                            {% if pelanggaran.plate_number %}
+                                {{ pelanggaran.plate_number }}
                             {% else %}
                                 <span style="color: red;">Tidak Terdeteksi</span>
                             {% endif %}
@@ -100,12 +101,24 @@
                             {% endif %}
                         </td>
                         <td>
-                            {% if pelanggaran.status == "Belum Ditindak" and pelanggaran.plat_nomor %}
+                            {% if pelanggaran.status == "Belum Ditindak" and pelanggaran.plate_number %}
                                 <a href="{% url 'kirim_notifikasi' pelanggaran.id_pelanggaran %}" class="btn btn-primary">Kirim Notifikasi</a>
                             {% endif %}
+                            
+                            {% if pelanggaran.status == "Ditindak" and pelanggaran.bukti_pembayaran %}
+                                <a href="{% url 'verifikasi_pembayaran' pelanggaran.id_pelanggaran %}" class="btn btn-success"
+                                onclick="return confirm('Verifikasi pembayaran ini?')">Verifikasi</a>
+                            {% endif %} 
                             <a href="{% url 'hapus_pelanggaran' pelanggaran.id_pelanggaran %}"
                                class="btn btn-danger" onclick="return confirm('Yakin ingin menghapus data ini?')">Hapus</a>
                         </td>
+                        <td>
+            {% if pelanggaran.bukti_pembayaran %}
+                <img src="{{ pelanggaran.bukti_pembayaran.url }}" width="100" onclick="showImageModal(this.src)" alt="Bukti Pembayaran">
+            {% else %}
+                <em>Tidak ada bukti</em>
+            {% endif %}
+        </td>
                     </tr>
                     {% empty %}
                     <tr><td colspan="7">Tidak ada data pelanggaran.</td></tr>

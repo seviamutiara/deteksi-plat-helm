@@ -179,8 +179,8 @@
           <td>{{ p.lokasi }}</td>
           <td>{{ p.status }}</td>
           <td>
-            {% if p.bukti_gambar %}
-              <img src="{{ p.bukti_gambar.url }}" alt="Bukti">
+            {% if p.bukti_pembayaran %}
+              <img src="{{ p.bukti_pembayaran.url }}" alt="Bukti">
             {% else %}
               Tidak ada gambar
             {% endif %}
