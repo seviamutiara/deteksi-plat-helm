@@ -44,19 +44,6 @@
                     </div>
                 </div>
 
-                <div class="summary">
-                    <h3>Total Denda Per Pengguna</h3>
-                    <ul>
-                        {% for user, total in denda_per_user.items %}
-                            <li>
-                                {{ user.get_full_name|default:user.username }}:
-                                <strong>Rp {{ total|floatformat:0|intcomma }}</strong>
-                            </li>
-                        {% empty %}
-                            <li>Tidak ada data denda saat ini.</li>
-                        {% endfor %}
-                    </ul>
-                </div>
             </header>
 
         <section class="table-section">

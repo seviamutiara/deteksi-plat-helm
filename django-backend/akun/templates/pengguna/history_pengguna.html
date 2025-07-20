@@ -3,6 +3,7 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- penting untuk responsif -->
     <title>Histori Pelanggaran - Kamera Pintar</title>
     <link rel="stylesheet" href="{% static 'main/artikel.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
@@ -26,6 +27,11 @@
         .navbar .logo {
             font-weight: bold;
             font-size: 1.2rem;
+        }
+
+        .navbar nav {
+            display: flex;
+            flex-wrap: wrap;
         }
 
         .navbar nav a {
@@ -154,25 +160,46 @@
             color: #ccc;
         }
 
+        /* RESPONSIVE STYLES */
         @media (max-width: 768px) {
-            table {
-                font-size: 0.9rem;
+            body {
+                font-size: 14px;
             }
 
-            th, td {
-                padding: 0.6rem;
+            .navbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .navbar nav {
+                margin-top: 0.5rem;
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .navbar nav a {
+                margin-left: 0;
             }
 
             .container {
                 padding: 1rem;
             }
 
-            .navbar nav {
-                margin-top: 10px;
+            table {
+                font-size: 0.9rem;
+                min-width: 100%;
+            }
+
+            th, td {
+                padding: 0.6rem;
             }
 
             .judul-dengan-gambar img {
-                max-height: 80px;
+                max-height: 70px;
+            }
+
+            h1 {
+                font-size: 1.5rem;
             }
         }
     </style>
@@ -223,7 +250,7 @@
                     </td>
                     <td>
                         {% if p.bukti_pembayaran %}
-                            <img src="{{ p.bukti_pembayaran.url}}" class="thumbnail" alt="Bukti" onclick="showModal(this.src)">
+                            <img src="{{ p.bukti_pembayaran.url }}" class="thumbnail" alt="Bukti" onclick="showModal(this.src)">
                         {% else %}
                             Tidak ada gambar
                         {% endif %}

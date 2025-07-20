@@ -3,6 +3,7 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard Pengguna | Kamera Pintar</title>
   <link rel="stylesheet" href="{% static 'main/style.css' %}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
@@ -22,22 +23,45 @@
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
+      position: relative;
     }
 
-    .navbar .logo {
+    .logo {
       font-weight: bold;
       font-size: 1.2rem;
     }
 
-    .navbar nav a {
+    .nav-links {
+      display: flex;
+      gap: 1.2rem;
+    }
+
+    .nav-links a {
       color: white;
-      margin-left: 1.5rem;
       text-decoration: none;
       font-weight: 500;
     }
 
-    .navbar nav a:hover {
+    .nav-links a:hover {
       color: #FFD700;
+    }
+
+    .hamburger {
+      display: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    .nav-active {
+      display: flex !important;
+      flex-direction: column;
+      position: absolute;
+      top: 60px;
+      right: 20px;
+      background-color: #2E2E69;
+      border-radius: 0.5rem;
+      padding: 1rem;
+      z-index: 10;
     }
 
     .welcome-section {
@@ -52,18 +76,9 @@
       flex-wrap: wrap;
     }
 
-    .welcome-text {
-      flex: 1;
-    }
-
     .welcome-text h2 {
       font-size: 1.8rem;
       margin-bottom: 0.5rem;
-    }
-
-    .welcome-image {
-      flex: 1;
-      text-align: right;
     }
 
     .welcome-image img {
@@ -87,7 +102,6 @@
       border-radius: 0.5rem;
       border-collapse: collapse;
       box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-      overflow-x: auto;
     }
 
     th, td {
@@ -115,15 +129,30 @@
       .welcome-section {
         flex-direction: column;
         text-align: center;
+        padding: 1.5rem 1rem;
+        margin: 1rem;
       }
 
       .welcome-image {
         margin-top: 1rem;
-        text-align: center;
+      }
+
+      .nav-links {
+        display: none;
+        width: 100%;
+        flex-direction: column;
+        background-color: #2E2E69;
+      }
+
+      .hamburger {
+        display: block;
       }
 
       table {
         font-size: 0.85rem;
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
       }
 
       th, td {
@@ -137,9 +166,10 @@
 <!-- NAVBAR -->
 <header class="navbar">
   <div class="logo">Kamera Pintar</div>
-  <nav>
+  <i class="fas fa-bars hamburger" onclick="toggleNav()"></i>
+  <nav class="nav-links" id="navLinks">
     <a href="{% url 'home' %}">Dashboard</a>
-    <a href="{% url 'notifikasi' %}">Notifikasi Pelanggaran</a>
+    <a href="{% url 'notifikasi' %}">Notifikasi</a>
     <a href="{% url 'logout' %}">Logout</a>
   </nav>
 </header>
@@ -162,12 +192,12 @@
     <table>
       <thead>
         <tr>
-          <th>ID Pelanggaran</th>
-          <th>Plat Nomor</th>
+          <th>ID</th>
+          <th>Plat</th>
           <th>Waktu</th>
           <th>Lokasi</th>
           <th>Status</th>
-          <th>Bukti Gambar</th>
+          <th>Bukti</th>
         </tr>
       </thead>
       <tbody>
@@ -187,14 +217,19 @@
           </td>
         </tr>
         {% empty %}
-        <tr>
-          <td colspan="6">Anda belum memiliki pelanggaran.</td>
-        </tr>
+        <tr><td colspan="6">Anda belum memiliki pelanggaran.</td></tr>
         {% endfor %}
       </tbody>
     </table>
   </div>
 </div>
+
+<script>
+  function toggleNav() {
+    const nav = document.getElementById("navLinks");
+    nav.classList.toggle("nav-active");
+  }
+</script>
 
 {% include "partials/footer.html" %}
 </body>
